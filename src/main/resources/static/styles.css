@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+* {
+ font-size: 100%;
+ font-family: 'Roboto', sans-serif;
+}
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+.padding {
+    padding-top:1.2rem
+}
+.navbar{
+    padding: .9rem;
+    font-weight: bold;
+}
+.navbar-nav li {
+    padding-right: 20px;
+}
+
+.bgblack{
+    background-color: rgba(0, 0, 0, 0.90);
+    color: white;
+    text-align: center;
+}
+
+html, body {
+    height: 100%;
+}
+
+.wid-70{
+    width:70%;
+}
+
+.btn-black {
+    color: white;
+    background-color: black;
+    border-color: black; /*set the color you want here*/
+}
+.btn-black:hover, .btn-black:focus, .btn-black:active, .btn-black.active, .open>.dropdown-toggle.btn-black {
+    color: #fff;
+    background-color: #00b3db;
+    border-color: #285e8e; /*set the color you want here*/
+}
