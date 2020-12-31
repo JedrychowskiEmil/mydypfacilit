@@ -28,6 +28,12 @@ public class MainController {
 
     }
 
+    @GetMapping("/admin/staff")
+    public String adminStaff(Model model){
+        return "adminStaff";
+
+    }
+
     @GetMapping("/admin/groups")
     public String adminGrupy(Model model){
         return "admingroups";

@@ -44,7 +44,8 @@ html, body {
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-  background-color: #00b3db;
+  background-color: black;
+  color:white;
 }
 .tableFixHead          {
     overflow-y: auto; height: 100px;
@@ -56,3 +57,9 @@ html, body {
 .border-right {
   border-right: 1px dashed #333;
 }
+
+.border-bottom {
+  border-bottom: 1px dashed #333;
+}
+
+table { empty-cells: show;}
