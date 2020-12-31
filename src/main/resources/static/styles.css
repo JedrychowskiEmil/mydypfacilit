@@ -35,10 +35,24 @@ html, body {
 .btn-black {
     color: white;
     background-color: black;
-    border-color: black; /*set the color you want here*/
+    border-color: black; /*hover etc. color*/
 }
 .btn-black:hover, .btn-black:focus, .btn-black:active, .btn-black.active, .open>.dropdown-toggle.btn-black {
     color: #fff;
     background-color: #00b3db;
-    border-color: #285e8e; /*set the color you want here*/
+    border-color: #285e8e; /*hover etc. color*/
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #00b3db;
+}
+.tableFixHead          {
+    overflow-y: auto; height: 100px;
+}
+.tableFixHead thead th {
+    position: sticky; top: 0;
+}
+
+.border-right {
+  border-right: 1px dashed #333;
 }

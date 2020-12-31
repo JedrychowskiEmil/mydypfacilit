@@ -21,4 +21,16 @@ public class MainController {
         model.addAttribute("data","test123");
         return "helloworld";
     }
+
+    @GetMapping("/admin/students")
+    public String adminStudents(Model model){
+        return "adminStudents";
+
+    }
+
+    @GetMapping("/admin/groups")
+    public String adminGrupy(Model model){
+        return "admingroups";
+
+    }
 }

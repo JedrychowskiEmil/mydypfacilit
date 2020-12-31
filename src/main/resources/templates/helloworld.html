@@ -13,7 +13,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
           integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link href="styles.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/styles.css}" />
 </head>
 
 <body>
@@ -74,7 +74,7 @@
                 <!-- buttons left site -->
                 <div class="dropdown-divider"></div>
                 <div class="btn-group-vertical d-flex" role="group">
-                    <button type="button" class="btn btn-black active btn-lg btn-block"><i
+                    <button type="button" class="btn btn-black btn-lg btn-block"><i
                             class="fas fa-graduation-cap"></i> Dyplomanci
                     </button>
                     <button type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-user-tie"></i>

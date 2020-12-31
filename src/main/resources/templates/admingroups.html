@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MyDypFacilit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+
+<body class="bg-light">
+<!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/logo.png}"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggler="collapse"
+                data-target="navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user-graduate"></i> Dyplomanci</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><i class="fas fa-user-cog"></i> Narzędzia Administracyjne</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-cog"></i> Ustawienia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main body -->
+<!-- small div under nav bar -->
+<div class="container-fluid nopadding bgblack">
+    <div class="column">&nbsp</div>
+</div>
+
+<!-- Left menu and main body -->
+<div class="container-fluid h-100 nopadding">
+    <div class="row py-3 nopadding bg-light h-100">
+
+        <!-- Left menu -->
+        <div class="col-2 nopadding bgblack" id="sticky-sidebar">
+            <div class="sticky-top ">
+                <!-- Informations left site -->
+                <p class="font-white">Zalogowano jako:<br> Imię Nazwisko</p>
+
+                <!-- buttons left site -->
+                <div class="dropdown-divider"></div>
+                <div class="btn-group-vertical d-flex" role="group">
+                    <button type="button" class="btn btn-black btn-lg btn-block"><i
+                            class="fas fa-graduation-cap"></i> Dyplomanci
+                    </button>
+                    <button type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-user-tie"></i>
+                        Pracownicy
+                    </button>
+                    <button type="button" class="btn btn-black btn-lg btn-block active"><i class="fas fa-users"></i>
+                        Grupy Kont
+                    </button>
+                    <button type="button" class="btn btn-black btn-lg btn-block"><i class="far fa-newspaper"></i>
+                        Aktualności
+                    </button>
+                    <button type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-list-ol"></i>
+                        Proces Dyplomowania
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main body right site -->
+        <div class="col" id="main">
+            <div class="container-fluid">
+
+                <!-- First row -->
+                <div class="row padding">
+
+                    <!-- Table -->
+                    <div class="col-md-8">
+                        <table class="table table-striped table-bordered table-hover tableFixHead">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Wydział</th>
+                                <th scope="col">Kierunek</th>
+                                <th scope="col">Tryb</th>
+                                <th scope="col">Grupa</th>
+                                <th scope="col">Akcje</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Wydział Architektury Budownictwa i Sztuk Stosowanych</td>
+                                <td>Informatyka</td>
+                                <td>Stacjonarnie</td>
+                                <td>Grupa 1</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Modyfikuj</button>
+                                    <button type="button" class="btn btn-danger">Usuń</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Wydział Architektury Budownictwa i Sztuk Stosowanych</td>
+                                <td>Informatyka</td>
+                                <td>Zaocznie</td>
+                                <td>Grupa 1</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Modyfikuj</button>
+                                    <button type="button" class="btn btn-danger">Usuń</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Wydział Architektury Budownictwa i Sztuk Stosowanych</td>
+                                <td>Informatyka</td>
+                                <td>Zaocznie</td>
+                                <td>Grupa 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Modyfikuj</button>
+                                    <button type="button" class="btn btn-danger">Usuń</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Wydział Nauk Medycznych</td>
+                                <td>Pielegniarstwo</td>
+                                <td>Stacjonarnie</td>
+                                <td>Grupa III</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Modyfikuj</button>
+                                    <button type="button" class="btn btn-danger">Usuń</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Froms -->
+                    <div class="col-md-4">
+                        <form>
+                            <div class="form-group">
+                                <label for="department">Wydział</label>
+                                <input type="text" class="form-control" id="department"
+                                       placeholder="Wprowadź nazwe wydziału">
+                                <small id="emailHelp" class="form-text text-muted">*Pole nie może być puste</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="field">Kierunek</label>
+                                <input type="text" class="form-control" id="field"
+                                       placeholder="Wprowadź nazwe kierunku">
+                            </div>
+                            <div class="form-group">
+                                <label for="mode">Tryb studiów</label>
+                                <input type="text" class="form-control" id="mode"
+                                       placeholder="Wprowadź tryb studiów">
+                            </div>
+                            <div class="form-group">
+                                <label for="department">Grupa</label>
+                                <input type="text" class="form-control" id="group"
+                                       placeholder="Wprowadź numer lub nazwe grupy">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Stwórz nową grupę</button>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>
