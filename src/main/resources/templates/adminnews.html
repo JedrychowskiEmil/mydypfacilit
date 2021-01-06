@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MyDypFacilit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+
+<body class="bg-light">
+<!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/logo.png}"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggler="collapse"
+                data-target="navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user-graduate"></i> Dyplomanci</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><i class="fas fa-user-cog"></i> Narzędzia Administracyjne</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-cog"></i> Ustawienia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main body -->
+<!-- small div under nav bar -->
+<div class="container-fluid nopadding bgblack">
+    <div class="column">&nbsp</div>
+</div>
+
+<!-- Left menu and main body -->
+<div class="container-fluid h-100 nopadding">
+    <div class="row py-3 nopadding bg-light h-100">
+
+        <!-- Left menu -->
+        <div class="col-2 nopadding bgblack" id="sticky-sidebar">
+            <div class="sticky-top ">
+                <!-- Informations left site -->
+                <p class="font-white">Zalogowano jako:<br> Imię Nazwisko</p>
+
+                <!-- buttons left site -->
+                <div class="dropdown-divider"></div>
+                <div class="btn-group-vertical d-flex" role="group">
+                    <a href="/admin/students" type="button" class="btn btn-black btn-lg btn-block"><i
+                            class="fas fa-graduation-cap"></i> Dyplomanci
+                    </a>
+                    <a href="/admin/staff" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-user-tie"></i>
+                        Pracownicy
+                    </a>
+                    <a href="/admin/groups" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-users"></i>
+                        Grupy Kont
+                    </a>
+                    <a href="/admin/news" type="button" class="btn btn-black btn-lg btn-block active"><i class="far fa-newspaper"></i>
+                        Aktualności
+                    </a>
+                    <a href="/admin/steps" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-list-ol"></i>
+                        Proces Dyplomowania
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main body right site -->
+        <div class="col" id="main">
+            <div class="container-fluid">
+
+                <!-- First row -->
+                <div class="row padding border-bottom">
+                    <!-- Froms -->
+                    <div class="col-md-6 border-right">
+                        <h3> Dodaj lub modyfikuj kartę z aktualnościami</h3>
+                        <form>
+                            <div class="form-row">
+                                <div class="col-9">
+                                    <label for="title">Tytuł aktualności*</label>
+                                    <input type="text" class="form-control" id="title"
+                                           placeholder="Wprowadź tytuł aktualności">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <label for="content">Treść*</label>
+                                    <textarea class="form-control" id="content" rows="8"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col" style="padding-left:2rem;">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Oznacz jako ważne
+                                    </label>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="padding">
+
+                                <button type="submit" class="btn btn-primary">Zatwierdź</button>
+                                <small class="form-text text-muted">*Pole nie może być puste</small>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Instukcje -->
+                    <div class="col-md-6">
+                        <h3>Instrukcje</h3>
+                        <b>Po kliknięciu przycisku zatwierdź:</b>
+                        <ul>
+                            <li>Na górze strony głównej pojawi się nowa karta z aktualnościami</li>
+                            <br>
+                            <li>Zmodyfikowana karta pozostanie na swoim miejscu
+                            </li>
+                            <br>
+                            <li>Data widniejąca na karcie jest datą utworzenia a nie modyfikacji karty
+                            </li>
+                            <br>
+                            <li><b>Oznaczenie aktualności jako ważnej zmieni kolor nagłówka na czerwony</b>
+                            </li>
+                            <br>
+                            <button type="button" class="btn btn-warning btn-sm"><i class="fas fa-cog"></i></button>
+                            <a style="font-weight: 500;">Modyfikuj kartę</a>
+                            <br>
+                            <button type="button" class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
+                            <a style="font-weight: 500;">Usuń kartę</a>
+                            <br>
+                    </div>
+                </div>
+                <!-- 2nd row -->
+                <div class="row padding">
+
+
+                    <div class="col-md-12 padding">
+
+
+                    </div>
+                    <div class="container">
+                        <div class="row padding">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 style="color:red;">Termin oddania gotowej pracy</h4> <a style="color: orange;">30.08.2020</a>
+                                        <div class="float-right-top">
+                                            <button type="button" class="btn btn-warning btn-sm"><i
+                                                    class="fas fa-cog"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm"><i
+                                                    class="fas fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Dla wszystkich kierunków wydziału Architektury Budownictwa i Sztuk
+                                            Stosowanych termin oddania gotowej pracy dyplomowej to 30.01.2021</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row padding">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Karty wydania tematu pracy dyplomowej</h4> <a style="color: orange;">25.08.2020</a>
+                                        <div class="float-right-top">
+                                            <button type="button" class="btn btn-warning btn-sm"><i
+                                                    class="fas fa-cog"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm"><i
+                                                    class="fas fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Wypełnione arty wydania tematu pracy dyplomowej należy składać w dziekanacie
+                                            za pomoca poczty elektronicznej lub tradycyjnej do 20.11.2020</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

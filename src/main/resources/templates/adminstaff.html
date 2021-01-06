@@ -74,21 +74,21 @@
                 <!-- buttons left site -->
                 <div class="dropdown-divider"></div>
                 <div class="btn-group-vertical d-flex" role="group">
-                    <button type="button" class="btn btn-black btn-lg btn-block"><i
+                    <a href="/admin/students" type="button" class="btn btn-black btn-lg btn-block"><i
                             class="fas fa-graduation-cap"></i> Dyplomanci
-                    </button>
-                    <button type="button" class="btn btn-black btn-lg btn-block active"><i class="fas fa-user-tie"></i>
+                    </a>
+                    <a href="/admin/staff" type="button" class="btn btn-black btn-lg btn-block active"><i class="fas fa-user-tie"></i>
                         Pracownicy
-                    </button>
-                    <button type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-users"></i>
+                    </a>
+                    <a href="/admin/groups" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-users"></i>
                         Grupy Kont
-                    </button>
-                    <button type="button" class="btn btn-black btn-lg btn-block"><i class="far fa-newspaper"></i>
+                    </a>
+                    <a href="/admin/news" type="button" class="btn btn-black btn-lg btn-block"><i class="far fa-newspaper"></i>
                         Aktualności
-                    </button>
-                    <button type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-list-ol"></i>
+                    </a>
+                    <a href="/admin/steps" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-list-ol"></i>
                         Proces Dyplomowania
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -152,8 +152,10 @@
                                 </select>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Zatwierdź</button>
-                            <small class="form-text text-muted">*Pole nie może być puste</small>
+                            <div class="padding">
+                                <button type="submit" class="btn btn-primary">Zatwierdź</button>
+                                <small class="form-text text-muted">*Pole nie może być puste</small>
+                            </div>
                         </form>
                     </div>
 
@@ -172,7 +174,7 @@
                                 aplikacji
                             </li>
                             <br>
-                            <li><b>Automatycznie zostanie wygenerowane losowe <u style="font-weight: 900;">silne</u>
+                            <li><b>Automatycznie zostanie wygenerowane losowe <i style="font-weight: 900;">silne</i>
                                 hasło które zostanie dołączone do wiadomości email</b></li>
                             <br>
                             <button type="button" class="btn btn-warning btn-sm"><i class="fas fa-cog"></i></button>
@@ -194,8 +196,11 @@
                                     Wyświetlaj przypisanych dyplomantów &nbsp;
                                 </label>
                                 <br>
-                                <input class="form-check-input active" type="checkbox" value="" id="defaultCheck1" checked="">
-                                <button type="submit" class="btn btn-primary" style="margin-left:1rem; margin-bottom:0.5rem" ><i class="fas fa-sync-alt"></i></button>
+                                <input class="form-check-input active" type="checkbox" value="" id="defaultCheck1"
+                                       checked="">
+                                <button type="submit" class="btn btn-primary"
+                                        style="margin-left:1rem; margin-bottom:0.5rem"><i class="fas fa-sync-alt"></i>
+                                </button>
                             </div>
 
                         </form>

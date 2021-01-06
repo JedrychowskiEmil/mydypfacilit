@@ -32,13 +32,19 @@ html, body {
     width:70%;
 }
 
+.float-right-top {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+}
+
 .btn-black {
     color: white;
     background-color: black;
     border-color: black; /*hover etc. color*/
 }
 .btn-black:hover, .btn-black:focus, .btn-black:active, .btn-black.active, .open>.dropdown-toggle.btn-black {
-    color: #fff;
+    color: black;
     background-color: #00b3db;
     border-color: #285e8e; /*hover etc. color*/
 }

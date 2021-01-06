@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MyDypFacilit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/logo.png}"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggler="collapse"
+                data-target="navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user-graduate"></i> Dyplomanci</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin"><i class="fas fa-user-cog"></i> Narzędzia Administracyjne</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-cog"></i> Ustawienia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main body -->
+
+<!-- small div under nav bar -->
+<div class="container-fluid nopadding bgblack">
+    <div class="column">&nbsp</div>
+</div>
+
+<!-- Left menu and main body -->
+<div class="container-fluid h-100 nopadding">
+    <div class="row py-3 nopadding bg-light h-100">
+
+        <!-- Left menu -->
+        <div class="col-2 nopadding bgblack" id="sticky-sidebar">
+            <div class="sticky-top ">
+                <!-- Informations left site -->
+                <p class="font-white">Zalogowano jako:<br> Imię Nazwisko</p>
+
+                <!-- buttons left site -->
+                <div class="dropdown-divider"></div>
+                <div class="btn-group-vertical d-flex" role="group">
+                    <a href="/admin/students" type="button" class="btn btn-black btn-lg btn-block"><i
+                            class="fas fa-graduation-cap"></i> Dyplomanci
+                    </a>
+                    <a href="/admin/staff" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-user-tie"></i>
+                        Pracownicy
+                    </a>
+                    <a href="/admin/groups" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-users"></i>
+                        Grupy Kont
+                    </a>
+                    <a href="/admin/news" type="button" class="btn btn-black btn-lg btn-block"><i class="far fa-newspaper"></i>
+                        Aktualności
+                    </a>
+                    <a href="/admin/steps" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-list-ol"></i>
+                        Proces Dyplomowania
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main body right site -->
+        <div class="col" id="main">
+            <div class="container-fluid">
+
+                <!-- First row -->
+                <div class="row padding">
+
+                    <!-- Konta Studentów -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="embed-responsive embed-responsive-16by9 nopaddding">
+                                <img th:src="@{/images/graduate.jpg}" class="card-img-top embed-responsive-item"
+                                     alt="...">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Konta Dyplomantów</h5>
+                                <p class="card-text">Stwórz, usuń, modyfikuj oraz przeglądaj listy stworzonych kont
+                                    Dyplomantów</p>
+                                <a href="#" class="btn btn-primary float-right">Przejdź <i
+                                        class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konta Pracowników -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="embed-responsive embed-responsive-16by9 nopaddding">
+                                <img th:src="@{/images/promoter.jpg}" class="card-img-top embed-responsive-item"
+                                     alt="...">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Konta Pracowników</h5>
+                                <p class="card-text">Stwórz, usuń, modyfikuj, przeglądaj listy stworzonych kont
+                                    pracowników oraz przejrzyj listy dyplomantów których promują
+                                </p>
+                                <a href="#" class="btn btn-primary float-right">Przejdź <i
+                                        class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grupy kont-->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="embed-responsive embed-responsive-16by9 nopaddding">
+                                <img th:src="@{/images/groups.jpg}" class="card-img-top embed-responsive-item"
+                                     alt="...">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Grupy Kont</h5>
+                                <p class="card-text">Stwórz, usuń, modyfikuj i przeglądaj wydziały, kierunki, tryby oraz
+                                    grupy </p>
+                                <a href="#" class="btn btn-primary float-right">Przejdź <i
+                                        class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2nd Row -->
+                <div class="row padding">
+
+                    <!-- Aktualności -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="embed-responsive embed-responsive-16by9 nopaddding">
+                                <img th:src="@{/images/news.jpg}" class="card-img-top embed-responsive-item"
+                                     alt="...">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Aktualności</h5>
+                                <p class="card-text">Stwórz, usuń, modyfikuj oraz przeglądaj aktualności wyświetlane na
+                                    Stronie
+                                    Głównej</p>
+                                <a href="#" class="btn btn-primary float-right">Przejdź <i
+                                        class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Proces Dyplomowania -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="embed-responsive embed-responsive-16by9 nopaddding">
+                                <img th:src="@{/images/process.jpg}" class="card-img-top embed-responsive-item"
+                                     alt="...">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Proces Dyplomowania</h5>
+                                <p class="card-text">Zmodyfikuj treść strony z instrukcjami dotyczącymi Procesu
+                                    Dyplomowania
+                                </p>
+                                <a href="#" class="btn btn-primary float-right">Przejdź <i
+                                        class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+
+</html>

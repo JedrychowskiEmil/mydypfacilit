@@ -13,7 +13,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
           integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
 </head>
 
 <body>
@@ -56,6 +56,9 @@
 </nav>
 
 <!-- Main body -->
+<xmp>
+    <a th:utext="${data}">Description</a>
+</xmp>
 <!-- small div under nav bar -->
 <div class="container-fluid nopadding bgblack">
     <div class="column">&nbsp</div>

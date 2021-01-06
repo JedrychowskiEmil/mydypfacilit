@@ -78,10 +78,39 @@ public class DAOHibernate {
 /*        Query<Department> theQuery = session.createQuery("from Department where department_id=4", Department.class);
         Department department = theQuery.getSingleResult();*/
 
-        Department department2 = session.get(Department.class, 3L);
+/*        Department department2 = session.get(Department.class, 3L);
         System.out.println("wypisane");
         System.out.println(department2);
-        session.delete(department2);
+        session.delete(department2);*/
+    }
+
+    @Transactional
+    public void saveGroup(Department department){
+        Session session = entityManager.unwrap(Session.class);
+
+        session.saveOrUpdate(department);
+    }
+
+    @Transactional
+    public List<Department> getDepartments(){
+        Session session = entityManager.unwrap(Session.class);
+        Query<Department> query = session.createQuery("from Department", Department.class);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public Department getDepartmentById(Long id){
+        Session session = entityManager.unwrap(Session.class);
+        Department department = new Department();
+        department = session.get(Department.class, id);
+        return department;
+    }
+
+    @Transactional
+    public void deleteDepartmentById(Long id){
+        Session session = entityManager.unwrap(Session.class);
+        Department department = getDepartmentById(id);
+        session.delete(department);
     }
 
 }
