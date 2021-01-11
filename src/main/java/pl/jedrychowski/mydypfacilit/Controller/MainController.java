@@ -53,4 +53,9 @@ public class MainController {
         return "redirect:/settings";
     }
 
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+
 }

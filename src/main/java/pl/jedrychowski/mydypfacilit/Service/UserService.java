@@ -1,6 +1,12 @@
 package pl.jedrychowski.mydypfacilit.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.jedrychowski.mydypfacilit.DAO.DAOHibernate;
 import pl.jedrychowski.mydypfacilit.Entity.*;
@@ -10,17 +16,16 @@ import pl.jedrychowski.mydypfacilit.UserDepartmentWrapper;
 import pl.jedrychowski.mydypfacilit.UserListWrapper;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
+    @Autowired
     private DAOHibernate daoHibernate;
 
     @Autowired
-    public UserService(DAOHibernate daoHibernate) {
-        this.daoHibernate = daoHibernate;
-    }
-
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public List<UserListWrapper> getUserListWrapperList(Long departmentID, Long statusId, String role) {
 
@@ -171,8 +176,9 @@ public class UserService {
         user.setRoles(Collections.singletonList(role));
 
         //Generate and set password
-        String password = generatePassword();
-        user.setPassword(password);
+        /*String password = generatePassword();*/
+        String password = generateFun123();
+        user.setPassword(bCryptPasswordEncoder.encode(password));
 
         //Add user to database
         daoHibernate.saveOrUpdateUser(user);
@@ -242,6 +248,10 @@ public class UserService {
 
     }
 
+    public String generateFun123(){
+        return "fun123";
+    }
+
     public void setCustomStatus(Long id, String setstatusto, String newStatusName) {
             User user = daoHibernate.getUserById(id);
             Status status;
@@ -253,5 +263,23 @@ public class UserService {
         }
         user.getStudentTopic().setStatus(status);
         daoHibernate.saveOrUpdateUser(user);
+    }
+
+    public User getUserByemail(String email) {
+        return daoHibernate.getUserByEmail(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        User user = daoHibernate.getUserByEmail(s);
+        if (user == null) {
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 }
