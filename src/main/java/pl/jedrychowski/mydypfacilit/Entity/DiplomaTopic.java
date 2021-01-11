@@ -22,8 +22,9 @@ public class DiplomaTopic {
     @Column(name = "subject")
     private String subject;
 
-    @Column(name = "status")
-    private String status;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "status")
+    private Status status;
 
     public DiplomaTopic() {
     }
@@ -60,11 +61,11 @@ public class DiplomaTopic {
         this.subject = subject;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

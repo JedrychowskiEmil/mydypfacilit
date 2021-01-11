@@ -107,14 +107,21 @@
                     <div class="col-md-6 border-right">
                         <h3> Dodaj lub modyfikuj Wydział/Kierunek/Tryb/Grupę</h3>
 
-                        <form action="#" th:action="@{/admin/groupSave}" th:object="${newDepartment}" method="POST">
+                        <form action="#" th:action="@{/admin/groupSave}" th:object="${newDepartment}" method="POST"
+                              class="needs-validation" novalidate>
                             <input type="hidden" th:field="*{id}">
+                            <div th:object="${showOption}">
+                                <input type="hidden" th:field="*{showStaff}">
+                                <input type="hidden" th:field="*{showStudents}">
+                            </div>
                             <div class="form-row">
                                 <div class="col-9">
                                     <label for="department2">Wydział*</label>
                                     <input type="text" th:field="*{department}" class="form-control" id="department2"
-                                           placeholder="Wprowadź wydział">
+                                           placeholder="Wprowadź wydział" required>
+                                    <div class="invalid-feedback">To pole nie może być puste</div>
                                 </div>
+
                             </div>
                             <div class="form-row">
                                 <div class="col-9">
@@ -144,7 +151,6 @@
                             </div>
                         </form>
                     </div>
-
                     <!-- Instukcje -->
                     <div class="col-md-6">
                         <h3>Instrukcje</h3>
@@ -216,19 +222,19 @@
                             </thead>
                             <tbody th:each="department : ${departments}">
                             <tr>
-                                <td><span th:text="${#ids.seq('')}"</td>
+                                <td><span th:text="${#ids.seq('')}"></span></td>
                                 <td><span th:text="${department.department}"></span></td>
                                 <td><span th:text="${department.field}"></span></td>
                                 <td><span th:text="${department.studyMode}"></span></td>
                                 <td><span th:text="${department.studyGroup}"></span></td>
                                 <td th:with="variableTest = 0">
-                                    <a th:href="@{/admin/modifyGroup(id=${department.id})}"
+                                    <a th:href="@{/admin/modifyGroup(id=${department.id}, showStaff=${showOption.showStaff}, showStudents=${showOption.showStudents})}"
                                        class="btn btn-warning btn-sm"><i class="fas fa-cog"></i>
                                     </a>
 
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                            data-target="#deleteConfirm" th:attrappend="data-target=${department.id}"><i
-                                            class="fas fa-ban"></i>
+                                            data-target="#deleteConfirm" th:attrappend="data-target=${department.id}, ">
+                                        <i class="fas fa-ban"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -244,13 +250,13 @@
                                                 rekordu</h4>
                                         </div>
                                         <div class="modal-body">
-                                            Czy napewno chcesz usunąć rekord? <br>
+                                            Czy na pewno chcesz usunąć rekord? <br>
                                             Operacji nie można cofnąć
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj
                                             </button>
-                                            <a th:href="@{/admin/deleteGroup(id=${department.id})}"
+                                            <a th:href="@{/admin/deleteGroup(id=${department.id}, showStaff=${showOption.showStaff}, showStudents=${showOption.showStudents})}"
                                                class="btn btn-danger btn-sm">Usuń
                                             </a>
                                         </div>
@@ -260,7 +266,8 @@
 
                             <tr class="thead-dark" th:each="user: ${department.users}">
 
-                                <div th:if="${showOption.showStaff} or ${showOption.showStudents}"th:switch="${user.roles[0].name}">
+                                <div th:if="${showOption.showStaff} or ${showOption.showStudents}"
+                                     th:switch="${user.roles[0].name}">
                                     <div th:if="${showOption.showStaff}" th:case="'ROLE_PROMOTER'">
                                         <th scope="row"><i class="fas fa-user-tie"></i></th>
                                         <td style="font-weight:bold;">
@@ -285,6 +292,9 @@
 
                             </tbody>
                         </table>
+                        <div class="alert alert-info text-justify" role="alert" th:if="${#lists.isEmpty(departments)}">
+                            <b><i>Nie utworzono jeszcze żadnego wydziału</i></b>
+                        </div>
                     </div>
 
 
@@ -294,6 +304,27 @@
         </div>
     </div>
 </div>
+
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
 
 </body>
 

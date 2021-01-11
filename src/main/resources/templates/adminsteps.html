@@ -102,19 +102,23 @@
                     <div class="col-1"></div>
                     <div class="col-10">
                         <h3> Zmień stronę z proesem dyplomowania</h3>
-                        <form>
+                        <form action="#" th:action="@{/admin/steps/save}" method="POST">
                             <div class="form-row">
                                 <div class="col-12">
                                     <label for="content">Wprowadź treść strony (html) która będzie się wyświetlać pod
                                         zakładką Proces Dyplomowania</label>
-                                    <textarea class="form-control" id="content" rows="30"></textarea>
+                                    <textarea class="form-control" id="content" rows="30" th:text="${content}" th:name="content"></textarea>
                                 </div>
                             </div>
                             <div class="padding float-right">
                                 <button type="submit" class="btn btn-primary">Aktualizuj</button>
                             </div>
                         </form>
+                        <span th:utext="${content}"></span>
                     </div>
+                </div>
+                <div class="row padding">
+
                 </div>
             </div>
         </div>

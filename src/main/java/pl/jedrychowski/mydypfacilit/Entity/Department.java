@@ -85,13 +85,20 @@ public class Department {
 
     @Override
     public String toString() {
-        return "Department{" +
-                "id=" + id +
-                ", department='" + department + '\'' +
-                ", field='" + field + '\'' +
-                ", studyMode='" + studyMode + '\'' +
-                ", studyGroup='" + studyGroup + '\'' +
-                ", users[0]=" + users.get(0).getFirstName() +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(department);
+
+        if(!field.isEmpty() && !field.isBlank()){
+            stringBuilder.append(", ").append(field);
+        }
+
+        if(!studyMode.isEmpty() && !studyMode.isBlank()){
+            stringBuilder.append(", ").append(studyMode);
+        }
+
+        if(!studyGroup.isEmpty() && !studyGroup.isBlank()){
+            stringBuilder.append(", ").append(studyGroup);
+        }
+        return stringBuilder.toString();
     }
 }

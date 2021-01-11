@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MyDypFacilit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{/images/logo.png}"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggler="collapse"
+                data-target="navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/}"><i class="fas fa-home"></i> Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/steps}"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/students}"><i class="fas fa-user-graduate"></i> Dyplomanci</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/mythesis}"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin}"><i class="fas fa-user-cog"></i> Narzędzia
+                        Administracyjne</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/settings}"><i class="fas fa-cog"></i> Ustawienia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main body -->
+
+<!-- small div under nav bar -->
+<div class="container-fluid nopadding bgblack">
+    <div class="column">&nbsp</div>
+</div>
+
+<!-- Left menu and main body -->
+<div class="container-fluid h-100 nopadding">
+    <div class="row py-3 nopadding bg-light h-100">
+
+        <!-- Left menu -->
+        <div class="col-2 nopadding bgblack" id="sticky-sidebar">
+            <div class="sticky-top ">
+                <!-- Information left site -->
+                <p class="font-white">Zalogowano jako:<br> Imię Nazwisko</p>
+                <p class="font-white">inne informacje</p>
+            </div>
+        </div>
+
+        <!-- Main body right site -->
+        <div class="col" id="main">
+            <div class="container">
+
+                <!-- First row -->
+                <div class="row w-100 padding border-bottom">
+                    <h1><b>Aktualności</b></h1>
+                </div>
+                <div class="row">
+                    <div class="row padding w-100" th:each="card : ${allNews}">
+                        <div class="col-md-12 padding" >
+                            <div class="card border-bottom">
+                                <div class="card-header bg-dark">
+                                    <h4 th:style="${card.important ? 'color: red;' : 'color: white;'}"
+                                        th:text="${card.title}">Termin oddania gotowej pracy</h4>
+                                    <span style="color: orange;" th:text="${card.date}"></span>
+                                </div>
+                                <div class="card-body">
+                                    <p th:text="${card.content}"></p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+
+</html>

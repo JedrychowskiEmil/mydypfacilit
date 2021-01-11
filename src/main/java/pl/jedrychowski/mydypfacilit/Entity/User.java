@@ -1,11 +1,14 @@
 package pl.jedrychowski.mydypfacilit.Entity;
 
+import javassist.compiler.CompileError;
+
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Comparable<User>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,23 +30,23 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private Collection<DiplomaTopic> studentTopic;
+    @OneToOne(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    private DiplomaTopic studentTopic;
 
-    @OneToMany(mappedBy = "promoter", cascade = CascadeType.ALL)
-    private Collection<DiplomaTopic> promoterTopic;
+    @OneToMany(mappedBy = "promoter", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<DiplomaTopic> promoterTopic;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
+    private List<Role> roles;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "department_user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "department_id"))
-    private Collection<Department> departments;
+    private List<Department> departments;
 
 
     public User() {
@@ -97,35 +100,35 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Collection<DiplomaTopic> getStudentTopic() {
+    public DiplomaTopic getStudentTopic() {
         return studentTopic;
     }
 
-    public void setStudentTopic(Collection<DiplomaTopic> studentTopic) {
+    public void setStudentTopic(DiplomaTopic studentTopic) {
         this.studentTopic = studentTopic;
     }
 
-    public Collection<DiplomaTopic> getPromoterTopic() {
+    public List<DiplomaTopic> getPromoterTopic() {
         return promoterTopic;
     }
 
-    public void setPromoterTopic(Collection<DiplomaTopic> promoterTopic) {
+    public void setPromoterTopic(List<DiplomaTopic> promoterTopic) {
         this.promoterTopic = promoterTopic;
     }
 
-    public Collection<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
-    public Collection<Department> getDepartments() {
+    public List<Department> getDepartments() {
         return departments;
     }
 
-    public void setDepartments(Collection<Department> departments) {
+    public void setDepartments(List<Department> departments) {
         this.departments = departments;
     }
 
@@ -143,5 +146,16 @@ public class User {
                 ", roles=" + roles +
                 ", departments=" + departments +
                 '}';
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return Comparator.comparing((User o1) -> o1.getFirstName().toUpperCase())
+                .thenComparing((User o1) -> o1.getLastName().toUpperCase())
+                .compare(this, o);
+    }
+
+    public int compareToWithRole(User o){
+        return Comparator.comparing((User o1) -> o1.getRoles().get(0).getName().toUpperCase()).thenComparing(this::compareTo).compare(this, o);
     }
 }
