@@ -10,13 +10,12 @@ import pl.jedrychowski.mydypfacilit.DAO.DAOHibernate;
 import pl.jedrychowski.mydypfacilit.Entity.*;
 import pl.jedrychowski.mydypfacilit.Service.NewsService;
 import pl.jedrychowski.mydypfacilit.Service.UserService;
+import pl.jedrychowski.mydypfacilit.Wrapper.*;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 //TODO dodac limit znakow w formularzach i pod nimi diva https://da-software.net/en/2020/01/limit-the-number-of-characters-in-the-text-field-of-an-html-form/
 //TODO email wprowadzany ma byc malymi, imie naziwso zaczynac z duzych awsze

@@ -10,10 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.jedrychowski.mydypfacilit.DAO.DAOHibernate;
 import pl.jedrychowski.mydypfacilit.Entity.*;
-import pl.jedrychowski.mydypfacilit.PromoterStudentListWrapper;
-import pl.jedrychowski.mydypfacilit.UserDepartmentListWrapper;
-import pl.jedrychowski.mydypfacilit.UserDepartmentWrapper;
-import pl.jedrychowski.mydypfacilit.UserListWrapper;
+import pl.jedrychowski.mydypfacilit.Wrapper.PromoterStudentListWrapper;
+import pl.jedrychowski.mydypfacilit.Wrapper.UserDepartmentListWrapper;
+import pl.jedrychowski.mydypfacilit.Wrapper.UserDepartmentWrapper;
+import pl.jedrychowski.mydypfacilit.Wrapper.UserListWrapper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -248,7 +248,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public String generateFun123(){
+    private String generateFun123(){
         return "fun123";
     }
 

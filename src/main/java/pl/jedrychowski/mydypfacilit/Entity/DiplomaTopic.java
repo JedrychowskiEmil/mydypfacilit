@@ -22,9 +22,16 @@ public class DiplomaTopic {
     @Column(name = "subject")
     private String subject;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "status")
     private Status status;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "departmentId")
+    private Department department;
 
     public DiplomaTopic() {
     }
@@ -67,6 +74,22 @@ public class DiplomaTopic {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     @Override

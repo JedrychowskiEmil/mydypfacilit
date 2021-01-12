@@ -1,4 +1,4 @@
-package pl.jedrychowski.mydypfacilit;
+package pl.jedrychowski.mydypfacilit.Configuration;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

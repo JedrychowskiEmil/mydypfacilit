@@ -1,4 +1,4 @@
-package pl.jedrychowski.mydypfacilit;
+package pl.jedrychowski.mydypfacilit.Wrapper;
 
 import pl.jedrychowski.mydypfacilit.Entity.User;
 

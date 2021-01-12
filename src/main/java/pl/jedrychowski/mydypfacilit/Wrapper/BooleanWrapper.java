@@ -1,4 +1,4 @@
-package pl.jedrychowski.mydypfacilit;
+package pl.jedrychowski.mydypfacilit.Wrapper;
 
 public class BooleanWrapper {
     boolean show;
