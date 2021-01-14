@@ -258,8 +258,10 @@ public class DAOHibernate {
     }
 
     @Transactional
-    public DiplomaTopic getDiplomatopicById(long id) {
+    public DiplomaTopic getDiplomatopicById(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        return session.get(DiplomaTopic.class, id);
+        DiplomaTopic diplomaTopic = session.get(DiplomaTopic.class, id);
+
+        return diplomaTopic == null ? new DiplomaTopic() : diplomaTopic;
     }
 }

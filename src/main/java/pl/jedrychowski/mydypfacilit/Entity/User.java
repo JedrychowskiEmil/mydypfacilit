@@ -134,18 +134,13 @@ public class User implements Comparable<User>{
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", academicTitle='" + academicTitle + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", studentTopic=" + studentTopic +
-                ", promoterTopic=" + promoterTopic +
-                ", roles=" + roles +
-                ", departments=" + departments +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder();
+        if(academicTitle != null && academicTitle.length() > 0){
+            stringBuilder.append(academicTitle).append(" ");
+        }
+        stringBuilder.append(firstName).append(" ").append(lastName);
+
+        return stringBuilder.toString();
     }
 
     @Override

@@ -27,6 +27,14 @@ public class UserService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    public boolean changePassword(User user, String password, String password2) {
+        if(!password.equals(password2))return false;
+
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        daoHibernate.saveOrUpdateUser(user);
+        return true;
+    }
+
     public List<UserListWrapper> getUserListWrapperList(Long departmentID, Long statusId, String role) {
 
         List<User> users;
@@ -281,5 +289,13 @@ public class UserService implements UserDetailsService {
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+
+    public List<User> getPromotersByDepartmentId(Long departmentId) {
+        List<User> users = daoHibernate.getUsersByDepartmentId(departmentId);
+        Role role = daoHibernate.getRoleByName("ROLE_PROMOTER");
+        users.removeIf(t -> !t.getRoles().contains(role));
+        return users;
     }
 }

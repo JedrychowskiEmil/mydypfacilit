@@ -83,13 +83,174 @@
 
         <!-- Main body right site -->
         <div class="col" id="main">
-            <div class="container">
+            <div class="container-fluid">
 
                 <!-- First row -->
                 <div class="row w-100 padding border-bottom">
                     <h1><b>Dyplomanci</b></h1>
                 </div>
 
+                <div class="row padding">
+
+                    <!-- Table -->
+                    <div class="col-md-12 padding">
+                        <h4>Przypisani dyplomanci</h4>
+                        <table class="table table-striped table-bordered table-hover tableFixHead"
+                               th:if="${not #lists.isEmpty(assignedDiplomaTopics)}">
+                            <div th:each="wrapper : ${assignedDiplomaTopics}">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th colspan="6" style="text-align: center;">
+                                        <p th:text="${wrapper.department}"></p>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col" style="width: 5%">#</th>
+                                    <th scope="col" style="width: 15%">Imię i nazwisko</th>
+                                    <th scope="col" style="width: 20%">Temat</th>
+                                    <th scope="col" style="width: 30%">Opis</th>
+                                    <th scope="col" style="width: 15%">Status pracy</th>
+                                    <th scope="col" style="width: 10%" class="text-center">Akcje</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="topic : ${wrapper.diplomaTopics}">
+                                    <th scope="row"><span th:text="${#ids.seq('')}"></span></th>
+                                    <td>
+                                        <span th:text="${topic.student.firstName}"></span>
+                                        <span th:text="${topic.student.lastName}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${topic.subject}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${topic?.description}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${topic?.status.name}"></span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                                data-target="#accept" th:attrappend="data-target=${topic.id}">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                                data-target="#needCorrection" th:attrappend="data-target=${topic.id}">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                data-target="#remove" th:attrappend="data-target=${topic.id}">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </td>
+                                    <!-- accept - Button -->
+                                    <div class="modal fade" id="accept" tabindex="-1" role="dialog"
+                                         aria-labelledby="acceptLabel" th:attrappend="id=${topic.id}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <h4 class="modal-title" id="acceptLabel">Zaakceptuj gotową prace</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Czy na pewno chcesz oznaczyć prace jako <b>gotową i nie wymagającą popraw?</b></p>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm"
+                                                            data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <a th:href="@{/students/acceptTopicMarkFinished(id=${topic.id})}"
+                                                       class="btn btn-success btn-sm">Zaakceptuj
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- need correction - Button -->
+                                    <div class="modal fade" id="needCorrection" tabindex="-1" role="dialog"
+                                         aria-labelledby="needCorrectionLabel" th:attrappend="id=${topic.id}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <h4 class="modal-title" id="needCorrectionLabel">Oznacz prace jako wymagającą poprawy</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Zgloś dyplomantowi problemy/błędy w pracy</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm"
+                                                            data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <a th:href="@{/students/needCorrection(id=${topic.id})}"
+                                                       class="btn btn-warning btn-sm">Wymaga poprawek
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- remove - Button -->
+                                    <div class="modal fade" id="remove" tabindex="-1" role="dialog"
+                                         aria-labelledby="removeLabel" th:attrappend="id=${topic.id}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <h4 class="modal-title" id="removeLabel">Zrezygnuj z promotorstwa</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Czy na pewno chcesz <strong>zrezygnować</strong> z promotorstwa tego dyplomanta? Operacji nie można cofnąć</p>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm"
+                                                            data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <a th:href="@{/students/resign(id=${topic.id})}"
+                                                       class="btn btn-danger btn-sm">Zrezygnuj
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                                </tbody>
+                            </div>
+                        </table>
+
+                        <div th:if="${#lists.isEmpty(assignedDiplomaTopics)}">
+                            <table class="table table-striped table-bordered table-hover tableFixHead">
+                                <thead class="thead-dark">
+                                <tr>
+                                <tr>
+                                    <th scope="col" style="width: 5%">#</th>
+                                    <th scope="col" style="width: 15%">Imię i nazwisko</th>
+                                    <th scope="col" style="width: 20%">Temat</th>
+                                    <th scope="col" style="width: 33%">Opis</th>
+                                    <th scope="col" style="width: 15%">Status pracy</th>
+                                    <th scope="col" style="width: 7%" class="text-center">Akcje</th>
+                                </tr>
+                                </thead>
+                            </table>
+                            <div class="alert alert-info text-justify" role="alert">
+                                <b><i>Lista tematów proponowanych przez studentów jest pusta</i></b>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
             </div>
         </div>
 

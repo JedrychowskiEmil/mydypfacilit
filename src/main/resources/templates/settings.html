@@ -89,19 +89,19 @@
                         <div class="form-row">
                             <div class="col-6">
                                 <label for="title">Tytuły/Stopnie naukowe</label>
-                                <input type="text" th:value="${user.academicTitle}" class="form-control" id="title"
+                                <input type="text" th:value="${loggedUser.academicTitle}" class="form-control" id="title"
                                        placeholder="Wprowadź tytuł/stopień naukowy" disabled>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col">
                                 <label for="fname">Imię*</label>
-                                <input type="text" th:value="${user.firstName}" class="form-control" id="fname"
+                                <input type="text" th:value="${loggedUser.firstName}" class="form-control" id="fname"
                                        placeholder="Wprowadź imię pracownika" disabled>
                             </div>
                             <div class="col">
                                 <label for="lname">Nazwisko(a)*</label>
-                                <input type="text" th:value="${user.lastName}" class="form-control" id="lname"
+                                <input type="text" th:value="${loggedUser.lastName}" class="form-control" id="lname"
                                        placeholder="Wprowadź naziwsko(a)" disabled>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
                             <div class="col">
                                 <label for="department">Wydziały/Kieruneki/Tryby/Grupy</label>
                                 <select multiple class="form-control" id="department" disabled>
-                                    <option th:each="department : ${user.departments}" th:value="${department.id}"
+                                    <option th:each="department : ${loggedUser.departments}" th:value="${department.id}"
                                             th:text="${department}"></option>
                                 </select>
                                 <span th:each="department : *{departments}" th:text="${department}"></span>
@@ -139,7 +139,7 @@
                                             <textarea class="form-control" id="content" rows="7" th:name="content"
                                                       required></textarea>
                                             <div class="invalid-feedback">To pole nie może pozostać puste</div>
-                                            <input type="hidden" th:name="userId" th:value="${user.id}">
+                                            <input type="hidden" th:name="userId" th:value="${loggedUser.id}">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">

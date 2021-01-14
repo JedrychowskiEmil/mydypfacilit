@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MyDypFacilit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+
+<body class="bg-light">
+<!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/logo.png}"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggler="collapse"
+                data-target="navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-scroll"></i> Moja Praca Dyplomowa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user-cog"></i> Narzędzia Administracyjne</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-cog"></i> Ustawienia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main body -->
+<!-- small div under nav bar -->
+<div class="container-fluid nopadding bgblack">
+    <div class="column">&nbsp</div>
+</div>
+
+<!-- Left menu and main body -->
+<div class="container-fluid h-100 nopadding">
+    <div class="row py-3 nopadding bg-light h-100">
+
+        <!-- Left menu -->
+        <div class="col-2 nopadding bgblack" id="sticky-sidebar">
+            <div class="sticky-top ">
+                <!-- Informations left site -->
+                <p class="font-white">Zalogowano jako:<br>
+                    <span th:text="${loggedUser.firstName}"></span>
+                    <span th:text="${loggedUser.lastName}"></span>
+                </p>
+
+                <!-- buttons left site -->
+                <div class="dropdown-divider"></div>
+            </div>
+        </div>
+
+        <!-- Main body right site -->
+        <div class="col" id="main">
+            <!-- Without topic-->
+            <div class="container-fluid" th:if="${loggedUser.studentTopic == null}">
+
+                <!-- row 1 -->
+                <div class="row padding border-bottom">
+
+                    <!-- options to choose from -->
+                    <div class="col-6 border-right text-center">
+                        <h3>Nie masz jeszcze przypisanego tematu pracy</h3>
+                        <div class="row padding">
+                            <div class="col-6 border-right">
+                                <h5>Utwórz własny temat korzystając z formularza poniżej <i
+                                        class="fas fa-arrow-down"></i></h5>
+                            </div>
+                            <div class="col-6 border-right">
+                                <h5>Przejdz do strony <a class="link" href="#"><i class="fas fa-book"></i> Tematy</a> i
+                                    aplikuj o wybrany temat</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="col-6 padding">
+                        <h5><i>Nie wybrano jeszcze tematu pracy</i></h5>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 5%" aria-valuenow="100"
+                                 aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <br>
+                        <ul style="list-style-type:none">
+                            <li style="color:green;"><i class="fas fa-check"></i> Twoje konto zostało utworzone</li>
+                            <li><i class="far fa-dot-circle"></i> Utwórz własny temat lub aplikuj o jeden z tematów</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- row 2 -->
+                <div class="row padding border-bottom">
+                    <div class="col-6 border-right">
+                        <h5>Utwórz własny temat</h5>
+                        <form action="#" th:action="@{/mythesis/save}" th:object="${diplomaTopic}" method="POST"
+                              class="needs-validation" novalidate>
+                            <input type="hidden" th:field="*{id}">
+                            <div class="form-row">
+                                <div class="col">
+                                    <label for="title">Temat twojej pracy*</label>
+                                    <input type="text" th:field="*{subject}" class="form-control"
+                                           id="title"
+                                           placeholder="Wprowadź temat pracy" maxlength="50" required>
+                                    <div class="invalid-feedback">To pole nie może być puste</div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <label for="description">Krótki opis tematu</label>
+                                    <textarea th:field="*{description}" class="form-control"
+                                              id="description"
+                                              placeholder="Wprowadź krótki opis tematu" maxlength="2000"
+                                              rows="4"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="padding">
+                                <button type="submit" class="btn btn-primary">Zatwierdź</button>
+                                <small class="form-text text-muted">*Pole nie może być puste</small>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-6">
+                        <h5>Instrukcje</h5>
+                        <br>
+                        <ul>
+                            <li>
+                                <b>Utwórz</b> własny temat lub <b>aplikuj</b> o jeden z gotowych tematów
+                            </li>
+                            <br>
+                            <li>
+                                Każdy student może utworzyć lub aplikować tylko <b>jeden</b> temat
+                            </li>
+                            <br>
+                            <li>
+                                Możesz modyfikować swoj temat lub jego opis tylko jeśli <b>nie</b> aplikujesz o uznanie
+                                tematu
+                            </li>
+                            <br>
+                            <li>
+                                Po zaaplikowaniu czekaj na <b style="color:green">pozytywną</b> lub <b
+                                    style="color:red">negatywną</b> decyzje potencjalnego promotora
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <!-- With topic, without promoter -->
+            <!-- Apllication refused -->
+            <div class="container-fluid"
+                 th:if="${loggedUser?.studentTopic?.status?.name == 'Brak promotora' or loggedUser?.studentTopic?.status?.name == 'Temat odrzucono'}">
+
+                <!-- row 1 -->
+                <div class="row padding border-bottom">
+
+                    <!-- options to choose from -->
+                    <div class="col-6 padding border-right">
+                        <h3>Aplikuj o uznanie tematu pracy u wybranego promotora</h3>
+                        <h5 class="padding">Aplikuj o promotorstwo u:</h5>
+                        <form action="#" th:action="@{/mythesis/apply}" method="POST">
+
+                            <div class="form-row">
+                                <div class="col">
+                                    <select class="form-control" th:name="promoterId">
+                                        <option th:if="${#lists.isEmpty(promoters)}"
+                                                th:text="'Brak promotorów do wybrania'"></option>
+                                        <option th:each="promoter : ${promoters}" th:value="${promoter.id}"
+                                                th:text="${promoter}"></option>
+                                    </select>
+                                    <small th:if="${#lists.isEmpty(promoters)}">Dla twojego
+                                        wydziału/kierunku/trybu/grupy nie zostały dodani jeszcze żadni
+                                        potencjalni promotorzy</small>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <label>Wiadomość z uzasadnieniem prośby </label>
+                                    <textarea class="form-control" rows="12" th:name="content"
+                                              placeholder="Pamiętaj aby w wiadomości używać formy oraz zwrotów grzecznościowych"></textarea>
+                                </div>
+                            </div>
+                            <div class="padding">
+                                <button type="submit" class="btn btn-primary"
+                                        th:disabled="${#lists.isEmpty(promoters)}">Aplikuj
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="col-6 padding">
+                        <div class="row">
+                            <div class="col">
+                                <h5 th:text="${loggedUser.studentTopic.subject}"></h5>
+                                <div class="progress"
+                                     th:if="${loggedUser?.studentTopic?.status?.name == 'Temat odrzucono'}">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 10%"
+                                         aria-valuenow="100"
+                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="progress"
+                                     th:if="${loggedUser?.studentTopic?.status?.name != 'Temat odrzucono'}">
+                                    <div class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="100"
+                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <br>
+                                <ul style="list-style-type:none">
+                                    <li style="color:green;"><i class="fas fa-check"></i> Twoje konto zostało utworzone
+                                    </li>
+                                    <li style="color:green;"><i class="fas fa-check"></i> Utworzyłeś własny temat</li>
+                                    <li th:if="${loggedUser?.studentTopic?.status?.name == 'Temat odrzucono'}"
+                                        style="color:red;"><i class="fas fa-times"></i> Twoja aplikacja została
+                                        odrzucona
+                                    </li>
+                                    <li><i class="far fa-dot-circle"></i> Aplikuj o uznanie promotorstwa
+                                        <span th:if="${loggedUser?.studentTopic?.status?.name == 'Temat odrzucono'}">u innego promotora</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row padding">
+                            <div class="col">
+                                <h5>Instrukcje</h5>
+                                <br>
+                                <ul>
+                                    <li>
+                                        <b>Aplikuj</b> o uznanie tematu pracy u wybranego promotora
+                                    </li>
+                                    <br>
+                                    <li>
+                                        Możesz modyfikować swoj temat lub jego opis tylko jeśli <b>nie</b> aplikujesz o
+                                        uznanie
+                                        tematu
+                                    </li>
+                                    <br>
+                                    <li>
+                                        Po zaaplikowaniu czekaj na <b style="color:green">pozytywną</b> lub <b
+                                            style="color:red">negatywną</b> decyzje potencjalnego promotora
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- row 2 -->
+                <div class="row padding border-bottom">
+                    <div class="col-6 border-right">
+                        <h5 class="padding">Modyfikuj swój temat</h5>
+                        <form action="#" th:action="@{/mythesis/save}" th:object="${diplomaTopic}" method="POST"
+                              class="needs-validation" novalidate>
+                            <input type="hidden" th:field="*{id}">
+                            <div class="form-row">
+                                <div class="col">
+                                    <label for="titleModify">Temat twojej pracy*</label>
+                                    <input type="text" th:field="*{subject}" class="form-control"
+                                           id="titleModify"
+                                           placeholder="Wprowadź temat pracy" maxlength="50" required>
+                                    <div class="invalid-feedback">To pole nie może być puste</div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <label for="descriptionModify">Krótki opis tematu</label>
+                                    <textarea th:field="*{description}" class="form-control"
+                                              id="descriptionModify"
+                                              placeholder="Wprowadź krótki opis tematu" maxlength="2000"
+                                              rows="4"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="padding">
+                                <button type="submit" class="btn btn-primary">Zaktualizuj</button>
+                                <small class="form-text text-muted">*Pole nie może być puste</small>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-6 border-right">
+                        <h3>Aplikuj o gotowy temat</h3>
+                        <h5 class="padding">Przejdz do strony <a class="link" href="#"><i class="fas fa-book"></i>
+                            Tematy</a> i
+                            aplikuj o wybrany temat</h5>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- With topic, waiting for promoter decision -->
+            <div class="container-fluid"
+                 th:if="${loggedUser?.studentTopic?.status?.name == 'Zaproponowano temat' or loggedUser?.studentTopic?.status?.name == 'Temat promotora'}">
+
+                <!-- row 1 -->
+                <div class="row padding border-bottom">
+
+                    <!-- options to choose from -->
+                    <div class="col-6 padding border-right">
+                        <h3 c><i class="fas fa-hourglass-half"></i> Czekaj na decyzje promotora</h3>
+                        <div class=" padding border-bottom">
+                            <h5 class="padding">Aplikujesz uznanie tematu:</h5>
+                            <span th:text="${loggedUser.studentTopic.subject}"></span>
+                            <h5 class="padding">U promotora:</h5>
+                            <span th:text="${loggedUser.studentTopic.promoter?.academicTitle}"></span>
+                            <span th:text="${loggedUser.studentTopic.promoter?.firstName}"></span>
+                            <span th:text="${loggedUser.studentTopic.promoter?.lastName}"></span>
+                        </div>
+                        <div class="padding">
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#undo">
+                                <i class="fas fa-times"></i> Anuluj
+                            </button>
+                        </div>
+
+                        <!-- Confirm undo appluy - Button -->
+                        <div class="modal fade" id="undo" tabindex="-1" role="dialog"
+                             aria-labelledby="deleteConfirmLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+
+                                        <h4 class="modal-title" id="deleteConfirmLabel">Potwierdz anulowanie</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Czy na pewno chcesz anulować aplikacje o uznanie tematu? <br>
+                                        Operacji nie można cofnąć
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="#" th:action="@{/mythesis/undoapply}" method="POST">
+                                            <div class="padding">
+                                                <input type="hidden" th:name="diplomaId"
+                                                       th:value="${loggedUser.studentTopic.id}">
+                                                <button class="btn btn-danger"> Anuluj aplikacje</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="col-6 padding">
+                        <div class="row">
+                            <div class="col">
+                                <h5 th:text="${loggedUser.studentTopic.subject}"></h5>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="100"
+                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <br>
+                                <ul style="list-style-type:none">
+                                    <li style="color:green;"><i class="fas fa-check"></i> Twoje konto zostało utworzone
+                                    </li>
+                                    <li style="color:green;"><i class="fas fa-check"></i> Utworzyłeś własny temat</li>
+                                    <li style="color:green;"><i class="fas fa-check"></i> Aplikujesz o temat u wybranego
+                                        promotora
+                                    </li>
+                                    <li><i class="far fa-dot-circle"></i> Czekaj na decyzje promotora</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row padding">
+                            <div class="col">
+                                <h5>Instrukcje</h5>
+                                <br>
+                                <ul>
+                                    <li>
+                                        Czekaj na <b style="color:green">pozytywną</b> lub <b
+                                            style="color:red">negatywną</b> decyzje potencjalnego promotora
+                                    </li>
+                                    <br>
+                                    <li>
+                                        W każdej chwili możesz anulować swoją aplikacje
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- work in progress -->
+            <!-- need changes -->
+            <!-- accepted -->
+            <!-- final accept -->
+            <!-- custom status -->
+            <div class="container-fluid"
+                 th:if="${loggedUser.studentTopic != null and loggedUser?.studentTopic?.status?.name != 'Brak promotora' and loggedUser?.studentTopic?.status?.name != 'Temat odrzucono' and loggedUser?.studentTopic?.status?.name != 'Zaproponowano temat' and loggedUser?.studentTopic?.status?.name != 'Temat promotora'}">
+
+                <!-- work in progress -->
+                <!-- need changes -->
+                <div th:if="${loggedUser?.studentTopic?.status?.name == 'W trakcie pisania pracy' or loggedUser?.studentTopic?.status?.name == 'Wymaga poprawy'}">
+                    <!-- row 1 -->
+                    <div class="row padding border-bottom">
+
+                        <!-- options to choose from -->
+                        <div class="col-6 padding border-right">
+                            <h3>Aplikuj o uznanie tematu pracy u wybranego promotora</h3>
+                            <h5 class="padding">Aplikuj o promotorstwo u:</h5>
+                            <form action="#" th:action="@{/mythesis/apply}" method="POST">
+
+                                <div class="form-row">
+                                    <div class="col">
+                                        <select class="form-control" th:name="promoterId">
+                                            <option th:if="${#lists.isEmpty(promoters)}"
+                                                    th:text="'Brak promotorów do wybrania'"></option>
+                                            <option th:each="promoter : ${promoters}" th:value="${promoter.id}"
+                                                    th:text="${promoter}"></option>
+                                        </select>
+                                        <small th:if="${#lists.isEmpty(promoters)}">Dla twojego
+                                            wydziału/kierunku/trybu/grupy nie zostały dodani jeszcze żadni
+                                            potencjalni promotorzy</small>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label>Wiadomość z uzasadnieniem prośby </label>
+                                        <textarea class="form-control" rows="12" th:name="content"
+                                                  placeholder="Pamiętaj aby w wiadomości używać formy oraz zwrotów grzecznościowych"></textarea>
+                                    </div>
+                                </div>
+                                <div class="padding">
+                                    <button type="submit" class="btn btn-primary"
+                                            th:disabled="${#lists.isEmpty(promoters)}">Aplikuj
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Progress -->
+                        <div class="col-6 padding">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 th:text="${loggedUser.studentTopic.subject}"></h5>
+                                    <div class="progress"
+                                         th:if="${loggedUser?.studentTopic?.status?.name == 'Temat odrzucono'}">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 10%"
+                                             aria-valuenow="100"
+                                             aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <div class="progress"
+                                         th:if="${loggedUser?.studentTopic?.status?.name != 'Temat odrzucono'}">
+                                        <div class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="100"
+                                             aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <br>
+                                    <ul style="list-style-type:none">
+                                        <li style="color:green;"><i class="fas fa-check"></i> Twoje konto zostało utworzone
+                                        </li>
+                                        <li style="color:green;"><i class="fas fa-check"></i> Utworzyłeś własny temat</li>
+                                        <li th:if="${loggedUser?.studentTopic?.status?.name == 'Temat odrzucono'}"
+                                            style="color:red;"><i class="fas fa-times"></i> Twoja aplikacja została
+                                            odrzucona
+                                        </li>
+                                        <li><i class="far fa-dot-circle"></i> Aplikuj o uznanie promotorstwa
+                                            <span th:if="${loggedUser?.studentTopic?.status?.name == 'Temat odrzucono'}">u innego promotora</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="row padding">
+                                <div class="col">
+                                    <h5>Instrukcje</h5>
+                                    <br>
+                                    <ul>
+                                        <li>
+                                            <b>Aplikuj</b> o uznanie tematu pracy u wybranego promotora
+                                        </li>
+                                        <br>
+                                        <li>
+                                            Możesz modyfikować swoj temat lub jego opis tylko jeśli <b>nie</b> aplikujesz o
+                                            uznanie
+                                            tematu
+                                        </li>
+                                        <br>
+                                        <li>
+                                            Po zaaplikowaniu czekaj na <b style="color:green">pozytywną</b> lub <b
+                                                style="color:red">negatywną</b> decyzje potencjalnego promotora
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- row 2 -->
+                    <div class="row padding border-bottom">
+                        <div class="col-6 border-right">
+                            <h5 class="padding">Modyfikuj swój temat</h5>
+                            <form action="#" th:action="@{/mythesis/save}" th:object="${diplomaTopic}" method="POST"
+                                  class="needs-validation" novalidate>
+                                <input type="hidden" th:field="*{id}">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label for="titleModify">Temat twojej pracy*</label>
+                                        <input type="text" th:field="*{subject}" class="form-control"
+                                               id="titleModify"
+                                               placeholder="Wprowadź temat pracy" maxlength="50" required>
+                                        <div class="invalid-feedback">To pole nie może być puste</div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label for="descriptionModify">Krótki opis tematu</label>
+                                        <textarea th:field="*{description}" class="form-control"
+                                                  id="descriptionModify"
+                                                  placeholder="Wprowadź krótki opis tematu" maxlength="2000"
+                                                  rows="4"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="padding">
+                                    <button type="submit" class="btn btn-primary">Zaktualizuj</button>
+                                    <small class="form-text text-muted">*Pole nie może być puste</small>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-6 border-right">
+                            <h3>Aplikuj o gotowy temat</h3>
+                            <h5 class="padding">Przejdz do strony <a class="link" href="#"><i class="fas fa-book"></i>
+                                Tematy</a> i
+                                aplikuj o wybrany temat</h5>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+
+</html>

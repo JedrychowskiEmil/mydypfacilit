@@ -19,6 +19,8 @@ import pl.jedrychowski.mydypfacilit.Service.UserService;
 import pl.jedrychowski.mydypfacilit.Wrapper.DiplomaTopicDepartmentIdWrapper;
 import pl.jedrychowski.mydypfacilit.Wrapper.DiplomaTopicListDepartmentWrapper;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -44,68 +46,9 @@ public class MainController {
         return "home";
     }
 
-    @GetMapping("/settings")
-    public String settings(Model model) {
-        User user = daoHibernate.getUserById(3L);
-        model.addAttribute("user", user);
-        return "settings";
-    }
-
-    @PostMapping("/settings/report")
-    public String report(@RequestParam("userId") Long userId,
-                         @RequestParam("content") String content,
-                         Model model) {
-
-        System.out.println(userId);
-        System.out.println(content);
-        return "redirect:/settings";
-    }
-
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    @GetMapping("/students")
-    public String students(Model model) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalEmail = authentication.getName();
-        User user = userService.getUserByemail(currentPrincipalEmail);
-        model.addAttribute("loggedUser", user);
-
-        return "students";
-    }
-
-    @GetMapping("/topics")
-    public String topics(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalEmail = authentication.getName();
-        User user = userService.getUserByemail(currentPrincipalEmail);
-        model.addAttribute("loggedUser", user);
-
-        DiplomaTopicDepartmentIdWrapper diplomaTopicDepartmentWrapper = new DiplomaTopicDepartmentIdWrapper(new DiplomaTopic(), 0L);
-        model.addAttribute("topic", diplomaTopicDepartmentWrapper);
-
-        Pair<List<DiplomaTopicListDepartmentWrapper>, List<DiplomaTopicListDepartmentWrapper>> promotersTopicStudentsTopics =
-         diplomaTopicService.getDiplomaTopicListDepartmentWrapper(user.getId());
-
-        model.addAttribute("promoterTopics", promotersTopicStudentsTopics.getFirst());
-        model.addAttribute("studentsTopics", promotersTopicStudentsTopics.getSecond());
-
-
-        return "topics";
-    }
-
-    //TODO - przerzucic do serwisu dodanie usera
-    @PostMapping("/topic/save")
-    public String savvetopic(@ModelAttribute DiplomaTopicDepartmentIdWrapper diplomaTopicDepartmentIdWrapper,
-                             Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalEmail = authentication.getName();
-        User user = userService.getUserByemail(currentPrincipalEmail);
-        diplomaTopicDepartmentIdWrapper.getDiplomaTopic().setPromoter(user);
-        diplomaTopicService.saveDiplomaTopic(diplomaTopicDepartmentIdWrapper);
-        return "redirect:/topics";
-    }
 }

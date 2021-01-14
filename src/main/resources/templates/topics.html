@@ -85,12 +85,14 @@
                     <!-- Froms -->
                     <div class="col-md-6 border-right">
                         <h3>Zaproponuj temat pracy</h3>
-                        <form action="#" th:action="@{/topic/save}" th:object="${topic}" method="POST" class="needs-validation" novalidate>
-                           <input type="hidden" th:field="*{diplomaTopic.id}">
+                        <form action="#" th:action="@{/topics/save}" th:object="${topic}" method="POST"
+                              class="needs-validation" novalidate>
+                            <input type="hidden" th:field="*{diplomaTopic.id}">
                             <div class="form-row">
                                 <div class="col">
                                     <label for="title">Zaproponuj temat pracy*</label>
-                                    <input type="text" th:field="*{diplomaTopic.subject}" class="form-control" id="title"
+                                    <input type="text" th:field="*{diplomaTopic.subject}" class="form-control"
+                                           id="title"
                                            placeholder="Wprowadź temat pracy" maxlength="50" required>
                                     <div class="invalid-feedback">To pole nie może być puste</div>
                                 </div>
@@ -98,8 +100,10 @@
                             <div class="form-row">
                                 <div class="col">
                                     <label for="description">Krótko opis tematu</label>
-                                    <textarea th:field="*{diplomaTopic.description}" class="form-control" id="description"
-                                              placeholder="Wprowadź krótki opis tematu" maxlength="2000" rows="4"></textarea>
+                                    <textarea th:field="*{diplomaTopic.description}" class="form-control"
+                                              id="description"
+                                              placeholder="Wprowadź krótki opis tematu" maxlength="2000"
+                                              rows="4"></textarea>
                                 </div>
                             </div>
                             <div>
@@ -122,114 +126,413 @@
                         <h3>Instrukcje</h3>
                         <b>Po kliknięciu przycisku zatwierdź:</b>
                         <ul>
-                            <li>Zostanie utworzone w systemie konto z wprowadzonymi danymi</li>
-                            <br>
-                            <li>Wygenerowany oraz wysłany zostanie <b>e-mail</b> z potwierdzeniem na wprowadzony adres
-                                email
+                            <li>
+                                Zostanie utworzony/zmodyfikowny temat dla wybranego wydziału/kierunku/trybu/grupy
                             </li>
                             <br>
-                            <li>E-mail konta będzie stanowić <b>login</b> dzięki któremy użytkownik zaloguję sie do
-                                aplikacji
+                            <li>
+                                Temat będzie widoczny i możliwy do wybrania dla <b>wszystkich</b> studentów w tym
+                                wydziale/kierunku/trybie/grupie
                             </li>
                             <br>
-                            <li><b>Automatycznie zostanie wygenerowane losowe <i style="font-weight: 900;">silne</i>
-                                hasło które zostanie dołączone do wiadomości email</b></li>
+                            <li>
+                                Każdy temat może zostać wybrany tylko przez <b>jednego</b> studenta
+                            </li>
                             <br>
-                            <span class="btn btn-warning btn-sm"><i class="fas fa-cog"></i></span>
-                            <a style="font-weight: 500;">Modyfikuj rekord</a>
+                            <li>
+                                Zaakceptowanie prośby o promotorstwo przeniesie studenta i wybrany przez niego temat do
+                                zakładki
+                                <a class="link" href="#"><i class="fas fa-user-graduate"></i> Dyplomanci</a></li>
                             <br>
-                            <span class="btn btn-danger btn-sm"><i class="fas fa-ban"></i></span>
-                            <a style="font-weight: 500;">Usuń rekord</a>
-                            <br>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-6 border-right">
+                                        <b>Prośby o promotorstwo</b>
+                                        <br>
+                                        <span class="btn btn-success btn-sm"><i class="fas fa-check"></i></span>
+                                        <a style="font-weight: 500;">Zaakceptuj prośbę o promotorstwo</a>
+                                        <br>
+                                        <span class="btn btn-danger btn-sm"><i class="fas fa-ban"></i></span>
+                                        <a style="font-weight: 500;">Odrzuć prośbę o promotorstwo</a>
+                                        <br>
+                                    </div>
+                                    <div class="col-6">
+                                        <b>Twoje proponowane tematy</b>
+                                        <br>
+                                        <span class="btn btn-warning btn-sm"><i class="fas fa-cog"></i></span>
+                                        <a style="font-weight: 500;">Modyfikuj temat</a>
+                                        <br>
+                                        <span class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i></span>
+                                        <a style="font-weight: 500;">Usuń temat</a>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+
                         </ul>
                     </div>
                 </div>
 
                 <!-- 2nd row -->
-                <!--<div class="row padding">
+                <!-- topics proposed by students-->
+                <div class="row padding">
 
-                    &lt;!&ndash; Table &ndash;&gt;
+                    <!-- Table -->
                     <div class="col-md-12 padding">
-
+                        <h4>Tematy zaproponowane przez studentów</h4>
                         <table class="table table-striped table-bordered table-hover tableFixHead"
-                               th:if="${not #lists.isEmpty(loggedUser.departments)}">
-                            <div th:each="department : ${departmentsOnlyStudents}">
+                               th:if="${not #lists.isEmpty(topicsProposedByStudent)}">
+                            <div th:each="wrapper : ${topicsProposedByStudent}">
                                 <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col" colspan="6" style="text-align: center;">
-                                        <a th:text="${department.department}"></a>
+                                    <th colspan="6" style="text-align: center;">
+                                        <p th:text="${wrapper.department}"></p>
                                     </th>
                                 </tr>
                                 </thead>
                                 <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Imię i nazwisko</th>
-                                    <th scope="col">E-mail</th>
-                                    <th scope="col">Promotor</th>
-                                    <th scope="col">Status pracy</th>
-                                    <th scope="col">Akcje</th>
+                                    <th scope="col" style="width: 5%">#</th>
+                                    <th scope="col" style="width: 23%">Imię i nazwisko</th>
+                                    <th scope="col" style="width: 25%">Temat</th>
+                                    <th scope="col" style="width: 40%">Opis</th>
+                                    <th scope="col" style="width: 7%" class="text-center">Akcje</th>
                                 </tr>
                                 </thead>
 
-                                <tbody th:each="user : ${department.users}">
-                                <tr>
+                                <tbody>
+                                <tr th:each="topic : ${wrapper.diplomaTopics}">
                                     <th scope="row"><span th:text="${#ids.seq('')}"></span></th>
-                                    <td><span th:text="${user.firstName}"></span>
-                                        <span th:text="${user.lastName}"></span>
-                                    </td>
-                                    <td><span th:text="${user.email}"></span></td>
-                                    <td><span th:text="${user?.studentTopic?.promoter?.firstName}"></span></td>
-                                    <td><span
-                                            th:text="${user?.studentTopic != null} ? ${user.studentTopic.status.name} : 'Nie wybrano tematu pracy'"></span>
+                                    <td>
+                                        <span th:text="${topic.student.firstName}"></span>
+                                        <span th:text="${topic.student.lastName}"></span>
                                     </td>
                                     <td>
+                                        <span th:text="${topic.subject}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${topic?.description}"></span>
+                                    </td>
+                                    <td class="text-center">
                                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                                data-target="#confirmConfirm" th:attrappend="data-target=${user.id}, ">
+                                                data-target="#accept" th:attrappend="data-target=${topic.id}">
                                             <i class="fas fa-check"></i>
                                         </button>
 
-                                        <a th:href="@{/admin/students(id=${user.id}, filterDepartmentId=${filterUsers.filterDepartmentId}, filterStatusId=${filterUsers.filterStatusId})}"
-                                           class="btn btn-warning btn-sm"><i class="fas fa-cog"></i>
-                                        </a>
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                data-target="#deleteConfirm" th:attrappend="data-target=${user.id}, ">
+                                                data-target="#refuse" th:attrappend="data-target=${topic.id}">
                                             <i class="fas fa-ban"></i>
                                         </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                                data-target="#changeStatus" th:attrappend="data-target=${user.id}, ">
-                                            <i class="fas fa-pen"></i>
-                                        </button>
-
                                     </td>
-                                </tr>
+                                    <!-- accept - Button -->
+                                    <div class="modal fade" id="accept" tabindex="-1" role="dialog"
+                                         aria-labelledby="acceptLabel" th:attrappend="id=${topic.id}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
 
+                                                    <h4 class="modal-title" id="acceptLabel">Zaakceptuj temat pracy</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Czy na pewno chcesz <b>zaakceptować</b> proponowany temat "<span
+                                                            th:text="${topic.subject}"></span>"?</p>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm"
+                                                            data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <a th:href="@{/topics/acceptTopic(id=${topic.id})}"
+                                                       class="btn btn-success btn-sm">Zaakceptuj
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- refuse - Button -->
+                                    <div class="modal fade" id="refuse" tabindex="-1" role="dialog"
+                                         aria-labelledby="refuseLabel" th:attrappend="id=${topic.id}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <h4 class="modal-title" id="refuseLabel">Odrzuć temat pracy</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Czy na pewno chcesz <b>odrzucić</b> proponowany temat "<span
+                                                            th:text="${topic.subject}"></span>"?</p>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm"
+                                                            data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <a th:href="@{/topics/refuseTopic(id=${topic.id})}"
+                                                       class="btn btn-danger btn-sm">Odrzuć
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
                                 </tbody>
                             </div>
                         </table>
-                        <div th:if="${#lists.isEmpty(departmentsOnlyStudents)}">
+
+                        <div th:if="${#lists.isEmpty(topicsProposedByStudent)}">
                             <table class="table table-striped table-bordered table-hover tableFixHead">
                                 <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Imię i nazwisko</th>
-                                    <th scope="col">E-mail</th>
-                                    <th scope="col">Promotor</th>
-                                    <th scope="col">Status pracy</th>
+                                    <th scope="col">Temat</th>
+                                    <th scope="col" colspan="4">Opis</th>
                                     <th scope="col">Akcje</th>
                                 </tr>
                                 </thead>
                             </table>
                             <div class="alert alert-info text-justify" role="alert">
-                                <b><i>Nie utworzono jeszcze żadnego dyplomanta</i></b>
+                                <b><i>Lista tematów proponowanych przez studentów jest pusta</i></b>
                             </div>
                         </div>
 
                     </div>
 
 
-                </div>-->
+                </div>
 
+                <!-- topics that students are applying for-->
+                <div class="row padding">
+
+                    <!-- Table -->
+                    <div class="col-md-12 padding">
+                        <h4>Tematy o które ubiegają się studenci</h4>
+                        <table class="table table-striped table-bordered table-hover tableFixHead"
+                               th:if="${not #lists.isEmpty(topicsTakenByStudents)}">
+                            <div th:each="wrapper : ${topicsTakenByStudents}">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col" colspan="6" style="text-align: center;">
+                                        <p th:text="${wrapper.department}"></p>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col" style="width: 5%">#</th>
+                                    <th scope="col" style="width: 23%">Imię i nazwisko</th>
+                                    <th scope="col" style="width: 25%">Temat</th>
+                                    <th scope="col" style="width: 40%">Opis</th>
+                                    <th scope="col" style="width: 7%;" class="text-center">Akcje</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="topic : ${wrapper.diplomaTopics}">
+                                    <th scope="row"><span th:text="${#ids.seq('')}"></span></th>
+                                    <td>
+                                        <span th:text="${topic.student.firstName}"></span>
+                                        <span th:text="${topic.student.lastName}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${topic.subject}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${topic?.description}"></span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                                data-target="#accept2" th:attrappend="data-target=${topic.id}">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                data-target="#refuse2" th:attrappend="data-target=${topic.id}">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </td>
+                                    <!-- accept - Button -->
+                                    <div class="modal fade" id="accept2" tabindex="-1" role="dialog"
+                                         aria-labelledby="acceptLabel2" th:attrappend="id=${topic.id}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <h4 class="modal-title" id="acceptLabel2">Zaakceptuj temat
+                                                        pracy</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Czy na pewno chcesz <b>zaakceptować</b> proponowany temat "<span
+                                                            th:text="${topic.subject}"></span>"?</p>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm"
+                                                            data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <a th:href="@{/topics/acceptTopic(id=${topic.id})}"
+                                                       class="btn btn-success btn-sm">Zaakceptuj
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- refuse - Button -->
+                                    <div class="modal fade" id="refuse2" tabindex="-1" role="dialog"
+                                         aria-labelledby="refuseLabel2" th:attrappend="id=${topic.id}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <h4 class="modal-title" id="refuseLabel2">Odrzuć prośbę o
+                                                        promotorstwo</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Czy na pewno chcesz <b>odrzucić</b> prośbę o promotorstwo tematu
+                                                        "<span th:text="${topic.subject}"></span>"?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm"
+                                                            data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <a th:href="@{/topics/refuseTopic(id=${topic.id})}"
+                                                       class="btn btn-danger btn-sm">Odrzuć
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                                </tbody>
+                            </div>
+                        </table>
+
+                        <div th:if="${#lists.isEmpty(topicsTakenByStudents)}">
+                            <table class="table table-striped table-bordered table-hover tableFixHead">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Imię i nazwisko</th>
+                                    <th scope="col">Temat</th>
+                                    <th scope="col" colspan="4">Opis</th>
+                                    <th scope="col">Akcje</th>
+                                </tr>
+                                </thead>
+                            </table>
+                            <div class="alert alert-info text-justify" role="alert">
+                                <b><i>Lista tematów proponowanych przez studentów jest pusta</i></b>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <!-- topicsproposed by promoter-->
+                <div class="row padding">
+
+                    <!-- Table -->
+                    <div class="col-md-12 padding">
+                        <h4>Tematy które proponujesz</h4>
+                        <table class="table table-striped table-bordered table-hover tableFixHead"
+                               th:if="${not #lists.isEmpty(promoterTopics)}">
+                            <div th:each="wrapper : ${promoterTopics}">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th colspan="6" style="text-align: center;">
+                                        <p th:text="${wrapper.department}"></p>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col" style="width: 5%">#</th>
+                                    <th scope="col" style="width: 38%">Temat</th>
+                                    <th scope="col" style="width: 50%">Opis</th>
+                                    <th scope="col" style="width: 7%" class="text-center">Akcje</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="topic : ${wrapper.diplomaTopics}">
+                                    <th scope="row"><p th:text="${#ids.seq('')}"></p></th>
+                                    <td>
+                                        <span th:text="${topic.subject}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${topic?.description}"></span>
+                                    </td>
+                                    <td class="text-center">
+
+                                        <a th:href="@{/topics(id=${topic.id})}"
+                                           class="btn btn-warning btn-sm">
+                                            <i class="fas fa-cog"></i>
+                                        </a>
+
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                data-target="#delete" th:attrappend="data-target=${topic.id}">
+                                            <i class="fas fa-times-circle"></i>
+                                        </button>
+                                    </td>
+                                    <!-- refuse - Button -->
+                                    <div class="modal fade" id="delete" tabindex="-1" role="dialog"
+                                         aria-labelledby="deleteLabel" th:attrappend="id=${topic.id}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+
+                                                    <h4 class="modal-title" id="deleteLabel">Potwierdź usunięcie
+                                                        tematu</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Czy na pewno chcesz <b>usunąć</b> temat "<span
+                                                            th:text="${topic.subject}"></span>"?</p>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm"
+                                                            data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <a th:href="@{/topics/deleteTopic(id=${topic.id})}"
+                                                       class="btn btn-danger btn-sm">Odrzuć
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                                </tbody>
+                            </div>
+                        </table>
+
+                        <div th:if="${#lists.isEmpty(promoterTopics)}">
+                            <table class="table table-striped table-bordered table-hover tableFixHead">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Temat</th>
+                                    <th scope="col" colspan="4">Opis</th>
+                                    <th scope="col">Akcje</th>
+                                </tr>
+                                </thead>
+                            </table>
+                            <div class="alert alert-info text-justify" role="alert">
+                                <b><i>Lista tematów proponowanych przez studentów jest pusta</i></b>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
             </div>
 
         </div>
@@ -254,6 +557,12 @@
     });
   }, false);
 })();
+
+
+
+
+
+
 
 
 

@@ -60,6 +60,10 @@ html, body {
     position: sticky; top: 0;
 }
 
+.tableFixHead td.right th.right {
+    text-align: right;
+}
+
 .border-right {
   border-right: 1px dashed #333;
 }
@@ -69,3 +73,5 @@ html, body {
 }
 
 table { empty-cells: show;}
+
+
