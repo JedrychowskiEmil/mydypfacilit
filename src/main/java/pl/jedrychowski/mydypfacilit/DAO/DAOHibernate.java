@@ -213,25 +213,25 @@ public class DAOHibernate {
     }
 
     @Transactional
-    public void deleteDiplomatopic(DiplomaTopic diplomaTopic){
+    public void deleteDiplomatopic(DiplomaTopic diplomaTopic) {
         Session session = entityManager.unwrap(Session.class);
         session.delete(diplomaTopic);
     }
 
     @Transactional
-    public void saveOrUpdateDiplomaTopic(DiplomaTopic diplomaTopic){
+    public void saveOrUpdateDiplomaTopic(DiplomaTopic diplomaTopic) {
         Session session = entityManager.unwrap(Session.class);
         session.saveOrUpdate(diplomaTopic);
     }
 
     @Transactional
-    public List<News> getNews(){
+    public List<News> getNews() {
         Session session = entityManager.unwrap(Session.class);
         return session.createQuery("from News", News.class).getResultList();
     }
 
     @Transactional
-    public News getNewsById(Long id){
+    public News getNewsById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return session.get(News.class, id);
     }
@@ -243,10 +243,10 @@ public class DAOHibernate {
     }
 
     @Transactional
-    public void deleteNewsById(Long id){
+    public void deleteNewsById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         News news = getNewsById(id);
-        if(news != null){
+        if (news != null) {
             session.delete(news);
         }
     }
@@ -254,7 +254,7 @@ public class DAOHibernate {
     @Transactional
     public User getUserByEmail(String email) {
         Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("from User u where u.email=:email",User.class).setParameter("email", email).getSingleResult();
+        return session.createQuery("from User u where u.email=:email", User.class).setParameter("email", email).getSingleResult();
     }
 
     @Transactional
@@ -263,5 +263,16 @@ public class DAOHibernate {
         DiplomaTopic diplomaTopic = session.get(DiplomaTopic.class, id);
 
         return diplomaTopic == null ? new DiplomaTopic() : diplomaTopic;
+    }
+
+    @Transactional
+    public List<DiplomaTopic> getDiplomatopicsByDepartmentId(Long departmentId) {
+        Session session = entityManager.unwrap(Session.class);
+        List<DiplomaTopic> diplomaTopics
+                = session.createQuery("select t from DiplomaTopic t join t.department d where d.id=:departmentId", DiplomaTopic.class)
+                .setParameter("departmentId", departmentId)
+                .getResultList();
+
+        return diplomaTopics != null ? diplomaTopics : new ArrayList<>();
     }
 }

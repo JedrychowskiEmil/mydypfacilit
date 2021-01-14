@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MyDypFacilit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+
+<body class="bg-light">
+<!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/logo.png}"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggler="collapse"
+                data-target="navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-scroll"></i> Moja Praca Dyplomowa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user-cog"></i> Narzędzia Administracyjne</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-cog"></i> Ustawienia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main body -->
+<!-- small div under nav bar -->
+<div class="container-fluid nopadding bgblack">
+    <div class="column">&nbsp</div>
+</div>
+
+<!-- Left menu and main body -->
+<div class="container-fluid h-100 nopadding">
+    <div class="row py-3 nopadding bg-light h-100">
+
+        <!-- Left menu -->
+        <div class="col-2 nopadding bgblack" id="sticky-sidebar">
+            <div class="sticky-top ">
+                <!-- Informations left site -->
+                <p class="font-white">Zalogowano jako:<br>
+                    <span th:text="${loggedUser.firstName}"></span>
+                    <span th:text="${loggedUser.lastName}"></span>
+                </p>
+
+                <!-- buttons left site -->
+                <div class="dropdown-divider"></div>
+            </div>
+        </div>
+
+        <!-- Main body right site -->
+        <div class="col" id="main">
+
+
+            <!-- accepted -->
+            <!-- final accept -->
+            <div class="container-fluid">
+                <!-- row 1 -->
+                <div class="row padding border-bottom">
+
+
+                    <div class="col-6 padding border-right"
+                         th:if="${loggedUser?.studentTopic?.status?.name == 'Praca zatwierdzona przez promotora'}">
+                        <h3 style="color:green">Twoja praca została sprawdzona oraz zatwierdzona przez promotora!</h3>
+                        <h4 class="padding"><i class="fas fa-hourglass-half"></i> Poczekaj na decyzje dziekanatu</h4>
+                    </div>
+                    <div class="col-6 padding border-right"
+                         th:if="${loggedUser?.studentTopic?.status?.name == 'Praca przyjeta i zatwierdzona'}">
+                        <h3 style="color:green"><strong>Twoja praca została ostatecznie sprawdzona oraz
+                            zatwierdzona!</strong></h3>
+                        <h4 class="padding">Pozostała tylko obrona twojej
+                            pracy dyplomowej, dobrze się przygotuj.</h4>
+                    </div>
+                    <!-- Progress -->
+                    <div class="col-6 padding">
+                        <div class="row">
+                            <div class="col">
+                                <h5 th:text="${loggedUser.studentTopic.subject}"></h5>
+                                <div class="progress"
+                                     th:if="${loggedUser?.studentTopic?.status?.name == 'Praca zatwierdzona przez promotora'}">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 90%"
+                                         aria-valuenow="100"
+                                         aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <div class="progress"
+                                     th:if="${loggedUser?.studentTopic?.status?.name == 'Praca przyjeta i zatwierdzona'}">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
+                                         aria-valuenow="100"
+                                         aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <div>
+
+                                    <br>
+                                    <ul style="list-style-type:none">
+                                        <li style="color:green;"><i class="fas fa-check"></i> Twoje konto zostało
+                                            utworzone
+                                        </li>
+                                        <li style="color:green;"><i class="fas fa-check"></i> Utworzyłeś własny
+                                            temat
+                                        </li>
+                                        <li style="color:green;"><i class="fas fa-check"></i> Aplikowano o uznanie
+                                            tematu pracy
+                                        </li>
+                                        <li style="color:green;"><i class="fas fa-check"></i> Apikacja rozpatrzona
+                                            pozytywnie
+                                        </li>
+                                        <div th:if="${loggedUser?.studentTopic?.status?.name == 'Praca zatwierdzona przez promotora'}">
+                                            <li style="color:green;"><i class="fas fa-check"></i>
+                                                Twoja praca została sprawdzona i zaakceptowana przez promotora
+                                            </li>
+                                            <li>
+                                                <i class="far fa-dot-circle"></i> Złóż swoją prace w wymaganej
+                                                formie do dziekanatu
+                                            </li>
+                                            <li>
+                                                <i class="far fa-dot-circle"></i> Czekaj na decyzje dziekanatu
+                                            </li>
+                                        </div>
+                                        <div th:if="${loggedUser?.studentTopic?.status?.name == 'Praca przyjeta i zatwierdzona'}">
+                                            <li style="color:green;"><i class="fas fa-check"></i>
+                                                Twoja praca została ostatecznie zaakceptowana i przyjęta przez
+                                                dziekanat
+                                            <li>
+                                                <i class="far fa-dot-circle"></i> Pozostała tylko obrona twojej
+                                                pracy dyplomowej
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+</body>
+
+</html>

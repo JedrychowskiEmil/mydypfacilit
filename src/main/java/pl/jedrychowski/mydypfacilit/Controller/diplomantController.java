@@ -11,9 +11,6 @@ import pl.jedrychowski.mydypfacilit.Entity.User;
 import pl.jedrychowski.mydypfacilit.Service.DiplomaTopicService;
 import pl.jedrychowski.mydypfacilit.Service.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/mythesis")
 public class diplomantController {
@@ -31,19 +28,34 @@ public class diplomantController {
         User user = userService.getUserByemail(currentPrincipalEmail);
         model.addAttribute("loggedUser", user);
 
-        DiplomaTopic diplomaTopic = user.getStudentTopic();
-        if (diplomaTopic == null) diplomaTopic = new DiplomaTopic();
-        model.addAttribute("diplomaTopic", diplomaTopic);
-
-        List<User> promotersInThatDepartment;
-        if (user.getDepartments().size() > 0l) {
-            promotersInThatDepartment = userService.getPromotersByDepartmentId(user.getDepartments().get(0).getId());
-        }else {
-            promotersInThatDepartment = new ArrayList<>();
+        if (user.getStudentTopic() == null) {
+            model.addAttribute("diplomaTopic", new DiplomaTopic());
+            return "mythesisnotopic";
         }
-        model.addAttribute("promoters", promotersInThatDepartment);
+        switch (user.getStudentTopic().getStatus().getName()) {
+            case "Brak promotora":
+            case "Temat odrzucono":
+                DiplomaTopic diplomaTopic = user.getStudentTopic();
+                model.addAttribute("diplomaTopic", diplomaTopic);
+                return "mythesisbeforeapply";
 
-        return "mythesis";
+
+            case "Zaproponowano temat":
+            case "Temat promotora":
+                return "mythesisapplied";
+
+            case "W trakcie pisania pracy":
+            case "Wymaga poprawy":
+                return "mythesisinmiddleofwork";
+
+            case "Praca zatwierdzona przez promotora":
+            case "Praca przyjeta i zatwierdzona":
+                return "mythesisaccepted";
+
+            default:
+                return "error-invalid-status-state";
+        }
+
     }
 
     @PostMapping("/save")
@@ -61,7 +73,7 @@ public class diplomantController {
     //TODO - no to ma dzialac
     @PostMapping("/apply")
     public String apply(@RequestParam("promoterId") Long promoterId,
-                        @RequestParam("content") String content){
+                        @RequestParam("content") String content) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalEmail = authentication.getName();
         User user = userService.getUserByemail(currentPrincipalEmail);
@@ -71,7 +83,7 @@ public class diplomantController {
     }
 
     @PostMapping("/undoapply")
-    public String undoapply(@RequestParam("diplomaId") Long diplomaId){
+    public String undoapply(@RequestParam("diplomaId") Long diplomaId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalEmail = authentication.getName();
         User user = userService.getUserByemail(currentPrincipalEmail);

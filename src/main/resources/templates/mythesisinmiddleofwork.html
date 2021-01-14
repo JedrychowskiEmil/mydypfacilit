@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MyDypFacilit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+
+<body class="bg-light">
+<!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/logo.png}"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggler="collapse"
+                data-target="navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-scroll"></i> Moja Praca Dyplomowa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user-cog"></i> Narzędzia Administracyjne</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-cog"></i> Ustawienia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main body -->
+<!-- small div under nav bar -->
+<div class="container-fluid nopadding bgblack">
+    <div class="column">&nbsp</div>
+</div>
+
+<!-- Left menu and main body -->
+<div class="container-fluid h-100 nopadding">
+    <div class="row py-3 nopadding bg-light h-100">
+
+        <!-- Left menu -->
+        <div class="col-2 nopadding bgblack" id="sticky-sidebar">
+            <div class="sticky-top ">
+                <!-- Informations left site -->
+                <p class="font-white">Zalogowano jako:<br>
+                    <span th:text="${loggedUser.firstName}"></span>
+                    <span th:text="${loggedUser.lastName}"></span>
+                </p>
+
+                <!-- buttons left site -->
+                <div class="dropdown-divider"></div>
+            </div>
+        </div>
+
+        <!-- Main body right site -->
+        <div class="col" id="main">
+
+            <!-- work in progress -->
+            <!-- need changes -->
+            <div class="container-fluid">
+
+                <!-- row 1 -->
+                <div class="row padding border-bottom">
+
+
+                    <div class="col-6 padding border-right">
+                        <h3>Prześlij gotową prace lub jej fragment twojemu promotorowi</h3>
+                        <h5 class="padding"><i class="fas fa-envelope"></i> Utwórz wiadomość:</h5>
+                        <form action="#" th:action="@{/mythesis/apply}" method="POST">
+                            <div class="form-row">
+                                <div class="col">
+                                    <label>Treść wiadomości:</label>
+                                    <textarea class="form-control" rows="12" th:name="content"
+                                              placeholder="Pamiętaj aby w wiadomości używać formy oraz zwrotów grzecznościowych"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group padding">
+                                <label for="sendFile"><i class="fas fa-paperclip"></i> Dodaj plik (.pdf, .doc,
+                                    .docx)</label>
+                                <input type="file" class="form-control-file" id="sendFile">
+                                <small th:if="${param.error}" style="color:red;">Tylko pliki z rozszerzeniami .pdf,
+                                    .doc, .docx są akceptowane</small>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">Wyślij wiadomość
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <!-- Progress -->
+                    <div class="col-6 padding">
+                        <div class="row border-bottom">
+                            <div class="col">
+                                <h5 th:text="${loggedUser.studentTopic.subject}"></h5>
+                                <div class="progress"
+                                     th:if="${loggedUser?.studentTopic?.status?.name == 'W trakcie pisania pracy'}">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 60%"
+                                         aria-valuenow="100"
+                                         aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <div class="progress"
+                                     th:if="${loggedUser?.studentTopic?.status?.name == 'Wymaga poprawy'}">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 60%"
+                                         aria-valuenow="100"
+                                         aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <div>
+
+                                    <br>
+                                    <ul style="list-style-type:none">
+                                        <li style="color:green;"><i class="fas fa-check"></i> Twoje konto zostało
+                                            utworzone
+                                        </li>
+                                        <li style="color:green;"><i class="fas fa-check"></i> Utworzyłeś własny
+                                            temat
+                                        </li>
+                                        <li style="color:green;"><i class="fas fa-check"></i> Aplikowano o uznanie
+                                            tematu pracy
+                                        </li>
+                                        <li style="color:green;"><i class="fas fa-check"></i> Apikacja rozpatrzona
+                                            pozytywnie
+                                        </li>
+                                        <div>
+                                            <li th:if="${loggedUser?.studentTopic?.status?.name == 'Wymaga poprawy'}"
+                                                style="color:orange;">
+                                                <i class="fas fa-times"></i> Przesłana przez ciebie
+                                                praca została oznaczona jako wymagająca poprawy
+                                            </li>
+                                            <li><i class="far fa-dot-circle"></i> Prześlij gotową prace lub jej
+                                                fragment
+                                                twojemu promotorowi
+                                            </li>
+                                            <li>
+                                                <i class="far fa-dot-circle"></i> Czekaj na sprawdzenie twojej pracy
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row padding">
+                            <div class="col">
+                                <h5>Instrukcje</h5>
+                                <br>
+                                <ul>
+                                    <li>
+                                        <b>Prześlij</b> gotową prace lub jej fragment twojemu promotorowi
+                                    </li>
+                                    <br>
+                                    <li>
+                                        Akceptowane są tylko pliki z rozszerzeniami <b>.pdf</b>, <b>.doc</b>,
+                                        <b>.docx</b>
+                                    </li>
+                                    <br>
+                                    <li>
+                                        Promotor sprawdzi twoją prace oraz oznaczy ją jako <b
+                                            style="color:green">gotową</b> lub <b style="color:orange">wymagającą
+                                        popraw</b>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <!-- row 2 -->
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+</body>
+
+</html>

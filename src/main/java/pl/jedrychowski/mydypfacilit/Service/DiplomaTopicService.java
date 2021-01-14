@@ -10,6 +10,7 @@ import pl.jedrychowski.mydypfacilit.Entity.Status;
 import pl.jedrychowski.mydypfacilit.Entity.User;
 import pl.jedrychowski.mydypfacilit.Wrapper.DiplomaTopicDepartmentIdWrapper;
 import pl.jedrychowski.mydypfacilit.Wrapper.DiplomaTopicListDepartmentWrapper;
+import pl.jedrychowski.mydypfacilit.Wrapper.UserDiplomaTopicListWrapper;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class DiplomaTopicService {
             Status status = daoHibernate.getStatusByName("Brak promotora");
             diplomaTopic.setStatus(status);
             daoHibernate.saveOrUpdateDiplomaTopic(diplomaTopic);
-        }else{
+        } else {
             DiplomaTopic oldDiplomaTopic = daoHibernate.getDiplomatopicById(diplomaTopic.getId());
             oldDiplomaTopic.setSubject(diplomaTopic.getSubject());
             oldDiplomaTopic.setDescription(diplomaTopic.getDescription());
@@ -155,18 +156,18 @@ public class DiplomaTopicService {
         DiplomaTopic diplomaTopic = daoHibernate.getDiplomatopicById(diplomaId);
         Status status = daoHibernate.getStatusByName("Zaproponowano temat");
 
-        if(diplomaTopic.getStatus().equals(status)) {
+        if (diplomaTopic.getStatus().equals(status)) {
             status = daoHibernate.getStatusByName("Temat odrzucono");
             diplomaTopic.setStatus(status);
             diplomaTopic.setPromoter(null);
             daoHibernate.saveOrUpdateDiplomaTopic(diplomaTopic);
-        }else if(diplomaTopic.getStatus().equals(daoHibernate.getStatusByName("Temat promotora"))){
+        } else if (diplomaTopic.getStatus().equals(daoHibernate.getStatusByName("Temat promotora"))) {
             status = daoHibernate.getStatusByName("Temat odrzucono");
             DiplomaTopic newDiplomaTopic = new DiplomaTopic();
             newDiplomaTopic.setStudent(diplomaTopic.getStudent());
             newDiplomaTopic.setStatus(status);
             newDiplomaTopic.setSubject("Aplikacja o temat odrzucona | " + diplomaTopic.getSubject());
-            newDiplomaTopic.setDescription(diplomaTopic.getPromoter().toString() + "Odrzucił twoją prośbę o uznanie tematu: \"" +diplomaTopic.getSubject() + "\"");
+            newDiplomaTopic.setDescription(diplomaTopic.getPromoter().toString() + "Odrzucił twoją prośbę o uznanie tematu: \"" + diplomaTopic.getSubject() + "\"");
             daoHibernate.saveOrUpdateDiplomaTopic(newDiplomaTopic);
 
             diplomaTopic.setStudent(null);
@@ -211,17 +212,44 @@ public class DiplomaTopicService {
         Status status = daoHibernate.getStatusByName("Zaproponowano temat");
 
         //if it was users topic then change promotor to null and roll back previous status
-        if(diplomaTopic.getStatus().equals(status)){
+        if (diplomaTopic.getStatus().equals(status)) {
             status = daoHibernate.getStatusByName("Brak promotora");
             diplomaTopic.setStatus(status);
             diplomaTopic.setPromoter(null);
             daoHibernate.saveOrUpdateDiplomaTopic(diplomaTopic);
 
             //if it was promoters topic then just set student field to null
-        }else if(diplomaTopic.getStatus().equals(daoHibernate.getStatusByName("Temat promotora"))){
+        } else if (diplomaTopic.getStatus().equals(daoHibernate.getStatusByName("Temat promotora"))) {
             diplomaTopic.setStudent(null);
             daoHibernate.saveOrUpdateDiplomaTopic(diplomaTopic);
         }
+    }
+
+    public List<DiplomaTopic> getProposedTopicsForDepartmentId(long departmentID) {
+        return daoHibernate.getDiplomatopicsByDepartmentId(departmentID);
+    }
+
+    public List<DiplomaTopic> filterDiplomaListByStatusName(List<DiplomaTopic> diplomaTopics, String statusName) {
+        Status status = daoHibernate.getStatusByName(statusName);
+        diplomaTopics.removeIf(t -> !t.getStatus().equals(status));
+        return diplomaTopics;
+    }
+
+    public List<UserDiplomaTopicListWrapper> wrapPromoterWithHisDiplomaTopics(List<DiplomaTopic> diplomaTopics) {
+        Set<User> promoters = new HashSet<>();
+        diplomaTopics.forEach(t -> promoters.add(t.getPromoter()));
+
+        List<UserDiplomaTopicListWrapper> userDiplomaTopicListWrappers = new ArrayList<>();
+        for (User p : promoters) {
+            UserDiplomaTopicListWrapper userDiplomaTopicListWrapper = new UserDiplomaTopicListWrapper(new ArrayList<>(), p);
+            for (DiplomaTopic t : diplomaTopics) {
+                if(t.getPromoter().equals(p)){
+                    userDiplomaTopicListWrapper.getDiplomaTopics().add(t);
+                }
+            }
+            userDiplomaTopicListWrappers.add(userDiplomaTopicListWrapper);
+        }
+        return userDiplomaTopicListWrappers;
     }
 }
 

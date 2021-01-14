@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.jedrychowski.mydypfacilit.Entity.DiplomaTopic;
+import pl.jedrychowski.mydypfacilit.Entity.Role;
 import pl.jedrychowski.mydypfacilit.Entity.User;
 import pl.jedrychowski.mydypfacilit.Service.DiplomaTopicService;
 import pl.jedrychowski.mydypfacilit.Service.UserService;
@@ -34,33 +35,54 @@ public class TopicController {
         User user = userService.getUserByemail(currentPrincipalEmail);
         model.addAttribute("loggedUser", user);
 
-        //get mew pbkect fpr fpr, pr fetch obj to modify
-        DiplomaTopicDepartmentIdWrapper diplomaTopicDepartmentWrapper;
-        DiplomaTopic diplomaTopic = diplomaTopicService.getDiplomaTopicById(id);
-        diplomaTopicDepartmentWrapper = new DiplomaTopicDepartmentIdWrapper(diplomaTopic, diplomaTopic == null ? 0 : diplomaTopic.getId());
-        model.addAttribute("topic", diplomaTopicDepartmentWrapper);
+        Role roleStudent = userService.getRoleByName("ROLE_STUDENT");
+        Role rolePromoter = userService.getRoleByName("ROLE_PROMOTER");
+
+        if (user.getRoles().contains(rolePromoter)) {
+            //fetch obj to modify or add empty
+            DiplomaTopicDepartmentIdWrapper diplomaTopicDepartmentWrapper;
+            DiplomaTopic diplomaTopic = diplomaTopicService.getDiplomaTopicById(id);
+            diplomaTopicDepartmentWrapper = new DiplomaTopicDepartmentIdWrapper(diplomaTopic, diplomaTopic == null ? 0 : diplomaTopic.getId());
+            model.addAttribute("topic", diplomaTopicDepartmentWrapper);
 
 
-        //split promoter's diploma topics into the one with student field null the the ones that are not
-        Pair<List<DiplomaTopic>, List<DiplomaTopic>> studentNullStudentNotNull =
-                diplomaTopicService.splitDiplomaListStudentNullandNotNull(user.getPromoterTopic());
-        model.addAttribute("promoterTopics", diplomaTopicService.wrapTopicListWithDepartment(studentNullStudentNotNull.getFirst()));
+            //split promoter's diploma topics into the one with student field null the the ones that are not
+            Pair<List<DiplomaTopic>, List<DiplomaTopic>> studentNullStudentNotNull =
+                    diplomaTopicService.splitDiplomaListStudentNullandNotNull(user.getPromoterTopic());
+            model.addAttribute("promoterTopics", diplomaTopicService.wrapTopicListWithDepartment(studentNullStudentNotNull.getFirst()));
 
 
-        //split topics proposed by students into topics created by promoter and by student
-        Pair<List<DiplomaTopic>, List<DiplomaTopic>> withStatusWithoutStatus =
-                diplomaTopicService.splitDiplomaListByStatus(studentNullStudentNotNull.getSecond(),
-                        Arrays.asList(
-                                "Zaproponowano temat",
-                                "Temat promotora"
-                        ));
-        withStatusWithoutStatus = diplomaTopicService.splitDiplomaListByStatus(withStatusWithoutStatus.getFirst(), Collections.singletonList("Temat promotora"));
+            //split topics proposed by students into topics created by promoter and by student
+            Pair<List<DiplomaTopic>, List<DiplomaTopic>> withStatusWithoutStatus =
+                    diplomaTopicService.splitDiplomaListByStatus(studentNullStudentNotNull.getSecond(),
+                            Arrays.asList(
+                                    "Zaproponowano temat",
+                                    "Temat promotora"
+                            ));
+            withStatusWithoutStatus = diplomaTopicService.splitDiplomaListByStatus(withStatusWithoutStatus.getFirst(), Collections.singletonList("Temat promotora"));
 
-        model.addAttribute("topicsTakenByStudents", diplomaTopicService.wrapTopicListWithDepartment(withStatusWithoutStatus.getFirst()));
-        model.addAttribute("topicsProposedByStudent", diplomaTopicService.wrapTopicListWithDepartment(withStatusWithoutStatus.getSecond()));
+            model.addAttribute("topicsTakenByStudents", diplomaTopicService.wrapTopicListWithDepartment(withStatusWithoutStatus.getFirst()));
+            model.addAttribute("topicsProposedByStudent", diplomaTopicService.wrapTopicListWithDepartment(withStatusWithoutStatus.getSecond()));
+            return "topics";
+        }
+
+        if (user.getRoles().contains(roleStudent)) {
+            ;
+            //get list of diploma topics in that department
+             List<DiplomaTopic> diplomaTopics = diplomaTopicService.getProposedTopicsForDepartmentId(user.getDepartments().get(0).getId());
+
+             //get only the one created by promoter
+            diplomaTopics = diplomaTopicService.filterDiplomaListByStatusName(diplomaTopics, "Temat promotora");
+
+            //wrap promoters with diploma topics they created
+            model.addAttribute("topicsProposedByPromoters",diplomaTopicService.wrapPromoterWithHisDiplomaTopics(diplomaTopics));
 
 
-        return "topics";
+            return "topicsforstudent";
+        }
+
+        return "error-no-auth-to-view";
+
     }
 
     //TODO - przerzucic do serwisu dodanie usera

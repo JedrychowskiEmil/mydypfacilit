@@ -298,4 +298,8 @@ public class UserService implements UserDetailsService {
         users.removeIf(t -> !t.getRoles().contains(role));
         return users;
     }
+
+    public Role getRoleByName(String role_promoter) {
+        return daoHibernate.getRoleByName(role_promoter);
+    }
 }
