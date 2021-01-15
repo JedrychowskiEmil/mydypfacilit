@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" style="height: 100%;">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,103 +16,91 @@
     <link rel="stylesheet" th:href="@{/styles.css}"/>
 </head>
 
-<body>
+<body style="height: 100%;">
 <!-- Navigation -->
-<nav class="navbar navbar-expand-md navbar-light bg-light">
+<nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/}">
             <img th:src="@{/images/logo.png}"/>
         </a>
-        <button class="navbar-toggler" type="button" data-toggler="collapse"
-                data-target="navbarResponsive">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/}"><i class="fas fa-home"></i> Strona główna</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/steps}"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_STUDENT')">
-                    <a class="nav-link" th:href="@{/mythesis}"><i class="fas fa-scroll"></i> Moja Praca Dyplomowa</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_PROMOTER')">
-                    <a class="nav-link" th:href="@{/students}"><i class="fas fa-user-graduate"></i> Dyplomanci</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_PROMOTER')">
-                    <a class="nav-link" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_STUDENT')">
-                    <a class="nav-link" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
-                </li>
-
-                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
-                    <a class="nav-link" th:href="@{/admin}"><i class="fas fa-user-cog"></i> Narzędzia
-                        Administracyjne</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/settings}"><i class="fas fa-cog"></i> Ustawienia</a>
-                </li>
-                <li class="nav-item">
-                    <form action="#" th:action="@{/logout}" method="POST">
-                        <button class="btn btn-link nav-link" type="submit"><i class="fas fa-sign-out-alt"></i> Wyloguj</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
     </div>
 </nav>
 
 <!-- Main body -->
 
 <!-- small div under nav bar -->
-<div class="container-fluid nopadding bgblack">
+<div class="container-fluid nopadding" style="background-color:black; ">
     <div class="column">&nbsp</div>
 </div>
 
 <!-- Left menu and main body -->
-<div class="container-fluid h-100 nopadding">
-    <div class="row py-3 nopadding bg-light h-100">
+<div class="container-fluid h-100">
+    <div class="row h-100">
 
         <!-- Left menu -->
-        <div class="col-2 nopadding bgblack" id="sticky-sidebar">
-            <div class="sticky-top ">
-                <!-- Information left site -->
-                <p class="font-white">Zalogowano jako:<br> Imię Nazwisko</p>
-                <p class="font-white">inne informacje</p>
-            </div>
-        </div>
+        <div class="col-2" style="background-color:rgba(0, 0, 0, 0.90)"></div>
 
         <!-- Main body right site -->
-        <div class="col" id="main">
-            <div class="container">
+        <div class="col-10 bg-light">
 
-                <!-- First row -->
-                <div class="row w-100 padding border-bottom">
-                    <h1><b>Aktualności</b></h1>
-                </div>
-                <div class="row">
-                    <div class="row padding w-100" th:each="card : ${allNews}">
-                        <div class="col-md-12 padding" >
-                            <div class="card border-bottom">
-                                <div class="card-header bg-dark">
-                                    <h4 th:style="${card.important ? 'color: red;' : 'color: white;'}"
-                                        th:text="${card.title}">Termin oddania gotowej pracy</h4>
-                                    <span style="color: orange;" th:text="${card.date}"></span>
-                                </div>
-                                <div class="card-body">
-                                    <p th:text="${card.content}"></p>
-                                </div>
+            <div>
+                <h4 style="padding-top: 2rem; padding-left:16px; border-bottom: 1px dashed #333;">Zaloguj</h4>
+                <div id="loginbox" style="margin-top: 0px;"
+                     class="col-4">
 
+                    <div class="panel panel-info">
+
+                        <div style="padding-top: 15x;" class="panel-body">
+                            <!-- Place for messages: error, alert etc ... -->
+                            <div class="form-group">
+                                <div class="col">
+                                    <div style="height:50px">
+                                        <!-- Check for login error -->
+                                        <div th:if="${param.error}" class="alert alert-danger col-xs-offset-1 col-xs-10">
+                                            Nieprawidłowy e-mail lub hasło
+                                        </div>
+
+                                        <!-- Check for logout -->
+                                        <div th:if="${param.logout}"class="alert alert-success col-xs-offset-1 col-xs-10">
+                                            Zostałeś wylogowany
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- Login Form -->
+                            <form th:action="@{/authenticateTheUser}"
+                                  method="POST" class="form-horizontal">
+
+                                <!-- User name -->
+                                <div style="margin-bottom: 25px" class="input-group">
+
+                                    <label style="margin:0 auto;" for="email"><b><i class="fas fa-at" style="padding-top:11px; padding-right:3px"></i></b></label>
+                                    <input type="text" name="username" placeholder="E-mail" class="form-control" id="email">
+                                </div>
+
+                                <!-- Password -->
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <label style="margin:0 auto;" for="password"><b><i class="fas fa-unlock" style="padding-top:11px; padding-right:3px"></i></b></label>
+                                    <input type="password" name="password" placeholder="Hasło" class="form-control" id="password">
+                                </div>
+                                <!-- Login/Submit Button -->
+                                <div style="margin-top: 10px; padding-right:5px;" class="text-right">
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-sign-in-alt"></i> Zaloguj</button>
+                                </div>
+
+                            </form>
+
                         </div>
 
                     </div>
+
                 </div>
 
             </div>
+
+
         </div>
 
     </div>

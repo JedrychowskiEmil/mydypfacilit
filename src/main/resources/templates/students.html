@@ -42,10 +42,10 @@
                     <a class="nav-link active" th:href="@{/students}"><i class="fas fa-user-graduate"></i> Dyplomanci</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ROLE_PROMOTER')">
-                    <a class="nav-link active" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
+                    <a class="nav-link" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ROLE_STUDENT')">
-                    <a class="nav-link active" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
+                    <a class="nav-link" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
                 </li>
 
                 <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
