@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,13 +35,20 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/steps}"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a class="nav-link" th:href="@{/mythesis}"><i class="fas fa-scroll"></i> Moja Praca Dyplomowa</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_PROMOTER')">
                     <a class="nav-link" th:href="@{/students}"><i class="fas fa-user-graduate"></i> Dyplomanci</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/mythesis}"><i class="fas fa-book"></i> Tematy</a>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_PROMOTER')">
+                    <a class="nav-link" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a class="nav-link" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a class="nav-link" th:href="@{/admin}"><i class="fas fa-user-cog"></i> Narzędzia
                         Administracyjne</a>
                 </li>

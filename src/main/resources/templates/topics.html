@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,7 +20,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" th:href="@{/}">
             <img th:src="@{/images/logo.png}"/>
         </a>
         <button class="navbar-toggler" type="button" data-toggler="collapse"
@@ -30,25 +30,35 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Strona główna</a>
+                    <a class="nav-link" th:href="@{/}"><i class="fas fa-home"></i> Strona główna</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
+                    <a class="nav-link" th:href="@{/steps}"><i class="fas fa-list-ol"></i> Proces Dyplomowania</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a class="nav-link" th:href="@{/mythesis}"><i class="fas fa-scroll"></i> Moja Praca Dyplomowa</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_PROMOTER')">
+                    <a class="nav-link" th:href="@{/students}"><i class="fas fa-user-graduate"></i> Dyplomanci</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_PROMOTER')">
+                    <a class="nav-link active" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a class="nav-link" th:href="@{/topics}"><i class="fas fa-book"></i> Tematy</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" th:href="@{/admin}"><i class="fas fa-user-cog"></i> Narzędzia
+                        Administracyjne</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-user-graduate"></i> Dyplomanci</a>
+                    <a class="nav-link" th:href="@{/settings}"><i class="fas fa-cog"></i> Ustawienia</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#"><i class="fas fa-book"></i> Tematy</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-user-cog"></i> Narzędzia Administracyjne</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-cog"></i> Ustawienia</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                    <form action="#" th:action="@{/logout}" method="POST">
+                        <button class="btn btn-link nav-link" type="submit"><i class="fas fa-sign-out-alt"></i> Wyloguj</button>
+                    </form>
                 </li>
             </ul>
         </div>
