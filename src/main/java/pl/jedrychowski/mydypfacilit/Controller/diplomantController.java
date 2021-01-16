@@ -6,10 +6,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import pl.jedrychowski.mydypfacilit.EmailService;
 import pl.jedrychowski.mydypfacilit.Entity.DiplomaTopic;
 import pl.jedrychowski.mydypfacilit.Entity.User;
 import pl.jedrychowski.mydypfacilit.Service.DiplomaTopicService;
 import pl.jedrychowski.mydypfacilit.Service.UserService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/mythesis")
@@ -20,6 +24,9 @@ public class diplomantController {
 
     @Autowired
     private DiplomaTopicService diplomaTopicService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("")
     public String mythesis(Model model) {
@@ -37,6 +44,10 @@ public class diplomantController {
             case "Temat odrzucono":
                 DiplomaTopic diplomaTopic = user.getStudentTopic();
                 model.addAttribute("diplomaTopic", diplomaTopic);
+
+                List<User> promoters = userService.getPromotersByDepartmentId(user.getDepartments().get(0).getId());
+                model.addAttribute("promoters", promoters);
+
                 return "mythesisbeforeapply";
 
 
@@ -89,6 +100,18 @@ public class diplomantController {
         User user = userService.getUserByemail(currentPrincipalEmail);
 
         diplomaTopicService.undoapply(diplomaId);
+        return "redirect:/mythesis";
+    }
+
+    @PostMapping("/sendmailwithfile")
+    public String sendmailwithfile(@RequestParam("file")MultipartFile file,
+                                   @RequestParam("content") String content){
+        //emailService.sendEmail("test@mail.com","odbiorca@mail.com", "tresc", "topic");
+        try {
+            emailService.sendMessageWithAttachment("test@mail.com", "odbiorca@mail.com", "tresc", "topic", file);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "redirect:/mythesis";
     }
 }

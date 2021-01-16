@@ -103,7 +103,7 @@
                     <div class="col-6 padding border-right">
                         <h3>Prześlij gotową prace lub jej fragment twojemu promotorowi</h3>
                         <h5 class="padding"><i class="fas fa-envelope"></i> Utwórz wiadomość:</h5>
-                        <form action="#" th:action="@{/mythesis/apply}" method="POST">
+                        <form action="#" th:action="@{/mythesis/sendmailwithfile}" method="POST" enctype="multipart/form-data">
                             <div class="form-row">
                                 <div class="col">
                                     <label>Treść wiadomości:</label>
@@ -114,7 +114,7 @@
                             <div class="form-group padding">
                                 <label for="sendFile"><i class="fas fa-paperclip"></i> Dodaj plik (.pdf, .doc,
                                     .docx)</label>
-                                <input type="file" class="form-control-file" id="sendFile">
+                                <input type="file" class="form-control-file" id="sendFile" th:name="file">
                                 <small th:if="${param.error}" style="color:red;">Tylko pliki z rozszerzeniami .pdf,
                                     .doc, .docx są akceptowane</small>
                             </div>
