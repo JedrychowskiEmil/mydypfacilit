@@ -216,7 +216,7 @@ public class UserService implements UserDetailsService {
         oldUser.setLastName(user.getLastName());
         oldUser.setEmail(user.getEmail());
         oldUser.setDepartments(departments);
-
+        oldUser.setAcademicTitle(user.getAcademicTitle());
         //update in database
         daoHibernate.saveOrUpdateUser(oldUser);
     }
@@ -370,7 +370,7 @@ public class UserService implements UserDetailsService {
         List<DiplomaTopic> topics = user.getPromoterTopic();
         stringBuilder.append("<ul>");
         for(DiplomaTopic t : topics){
-            if(t.getStudent() != null){
+            if(t.getStudent() != null && t.getStatus().getId() > 5){
                 stringBuilder.append("<li>");
                 stringBuilder.append(t.getStudent()).append("<br>");
                 stringBuilder.append(t.getStudent().getEmail()).append("<br><br>");

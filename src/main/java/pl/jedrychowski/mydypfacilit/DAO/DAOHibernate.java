@@ -253,7 +253,8 @@ public class DAOHibernate {
     @Transactional
     public User getUserByEmail(String email) {
         Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("from User u where u.email=:email", User.class).setParameter("email", email).getSingleResult();
+        User user =  session.createQuery("from User u where u.email=:email", User.class).setParameter("email", email).getSingleResult();
+        return user != null ? user : new User();
     }
 
     @Transactional

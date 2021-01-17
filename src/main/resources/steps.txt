@@ -1,1 +1,5 @@
-<b>process here</b>
+<ul>
+	<li>
+		<b>Twórz własny temat lub aplikuj o gotowy temat</b>
+	</li>
+</ul>

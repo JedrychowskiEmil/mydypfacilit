@@ -43,7 +43,7 @@ public class DiplomaTopicService {
 
         //check if new
         if (diplomaTopic.getId() == 0) {
-            Status status = daoHibernate.getStatusByName("Nie wybrano tematu pracy");
+            Status status = daoHibernate.getStatusByName("Temat promotora");
             diplomaTopic.setStatus(status);
 
             Department department = daoHibernate.getDepartmentById(departmentId);

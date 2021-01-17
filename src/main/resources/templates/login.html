@@ -35,16 +35,24 @@
 
 <!-- Left menu and main body -->
 <div class="container-fluid h-100">
-    <div class="row h-100">
+    <div class="row h-100 ">
 
-        <!-- Left menu -->
-        <div class="col-2" style="background-color:rgba(0, 0, 0, 0.90)"></div>
+
+        <div class="col-3" style="background-color:rgba(0, 0, 0, 0.90)"></div>
 
         <!-- Main body right site -->
-        <div class="col-10 bg-light">
 
-            <div>
-                <h4 style="padding-top: 2rem; padding-left:16px; border-bottom: 1px dashed #333;">Zaloguj</h4>
+        <div class="col-6 bg-light">
+            <div class="row" style="border-bottom: 1px dashed #333;">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <h4 style="padding-top: 2rem; ">Zaloguj</h4>
+                </div>
+                <div class="col-4"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-4" style="border-right: 1px dashed #333;"></div>
                 <div id="loginbox" style="margin-top: 0px;"
                      class="col-4">
 
@@ -52,57 +60,70 @@
 
                         <div style="padding-top: 15x;" class="panel-body">
                             <!-- Place for messages: error, alert etc ... -->
-                            <div class="form-group">
+                            <div class="row" style="margin-top:1rem;">
                                 <div class="col">
-                                    <div style="height:50px">
+                                    <div style="height:65px">
                                         <!-- Check for login error -->
-                                        <div th:if="${param.error}" class="alert alert-danger col-xs-offset-1 col-xs-10">
+                                        <div th:if="${param.error}"
+                                             class="alert alert-danger">
                                             Nieprawidłowy e-mail lub hasło
                                         </div>
 
                                         <!-- Check for logout -->
-                                        <div th:if="${param.logout}"class="alert alert-success col-xs-offset-1 col-xs-10">
+                                        <div th:if="${param.logout}"
+                                             class="alert alert-success">
                                             Zostałeś wylogowany
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col">
+                                    <!-- Login Form -->
+                                    <form th:action="@{/authenticateTheUser}"
+                                          method="POST" class="form-horizontal">
 
-                            <!-- Login Form -->
-                            <form th:action="@{/authenticateTheUser}"
-                                  method="POST" class="form-horizontal">
+                                        <!-- User name -->
+                                        <div style="margin-bottom: 25px" class="input-group">
 
-                                <!-- User name -->
-                                <div style="margin-bottom: 25px" class="input-group">
+                                            <label style="margin:0 auto;" for="email"><b><i class="fas fa-at"
+                                                                                            style="padding-top:11px; padding-right:3px"></i></b></label>
+                                            <input type="text" name="username" placeholder="E-mail" class="form-control"
+                                                   id="email">
+                                        </div>
 
-                                    <label style="margin:0 auto;" for="email"><b><i class="fas fa-at" style="padding-top:11px; padding-right:3px"></i></b></label>
-                                    <input type="text" name="username" placeholder="E-mail" class="form-control" id="email">
+                                        <!-- Password -->
+                                        <div style="margin-bottom: 25px" class="input-group">
+                                            <label style="margin:0 auto;" for="password"><b><i class="fas fa-unlock"
+                                                                                               style="padding-top:11px; padding-right:3px"></i></b></label>
+                                            <input type="password" name="password" placeholder="Hasło"
+                                                   class="form-control"
+                                                   id="password">
+                                        </div>
+                                        <!-- Login/Submit Button -->
+                                        <div style="margin-top: 10px; padding-right:5px;" class="text-right">
+                                            <button type="submit" class="btn btn-success"><i
+                                                    class="fas fa-sign-in-alt"></i>
+                                                Zaloguj
+                                            </button>
+                                        </div>
+
+                                    </form>
                                 </div>
-
-                                <!-- Password -->
-                                <div style="margin-bottom: 25px" class="input-group">
-                                    <label style="margin:0 auto;" for="password"><b><i class="fas fa-unlock" style="padding-top:11px; padding-right:3px"></i></b></label>
-                                    <input type="password" name="password" placeholder="Hasło" class="form-control" id="password">
-                                </div>
-                                <!-- Login/Submit Button -->
-                                <div style="margin-top: 10px; padding-right:5px;" class="text-right">
-                                        <button type="submit" class="btn btn-success"><i class="fas fa-sign-in-alt"></i> Zaloguj</button>
-                                </div>
-
-                            </form>
-
+                            </div>
                         </div>
 
                     </div>
 
                 </div>
-
+                <div class="col-4" style="border-left: 1px dashed #333;"></div>
             </div>
 
 
         </div>
 
+        <div class="col-3" style="background-color:rgba(0, 0, 0, 0.90)"></div>
     </div>
 </div>
 

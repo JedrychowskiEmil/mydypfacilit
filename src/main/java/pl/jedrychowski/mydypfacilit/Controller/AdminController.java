@@ -244,6 +244,7 @@ public class AdminController {
         model.addAttribute("newDepartment", new Department());
 
         List<Department> departments = daoHibernate.getDepartments();
+        departments.forEach(d -> d.getUsers().sort(User::compareToWithRole));
         model.addAttribute("departments", departments);
 
 

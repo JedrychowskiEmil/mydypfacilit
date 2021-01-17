@@ -69,7 +69,7 @@ public class TopicController {
         }
 
         if (user.getRoles().contains(roleStudent)) {
-            ;
+
             //get list of diploma topics in that department
              List<DiplomaTopic> diplomaTopics = diplomaTopicService.getProposedTopicsForDepartmentId(user.getDepartments().get(0).getId());
 
@@ -89,7 +89,7 @@ public class TopicController {
 
     //TODO - przerzucic do serwisu dodanie usera
     @PostMapping("/save")
-    public String savvetopic(@ModelAttribute DiplomaTopicDepartmentIdWrapper diplomaTopicDepartmentIdWrapper,
+    public String savetopic(@ModelAttribute DiplomaTopicDepartmentIdWrapper diplomaTopicDepartmentIdWrapper,
                              Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalEmail = authentication.getName();
