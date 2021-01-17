@@ -2,7 +2,9 @@ package pl.jedrychowski.mydypfacilit.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pl.jedrychowski.mydypfacilit.DAO.DAOHibernate;
 import pl.jedrychowski.mydypfacilit.Entity.Department;
 import pl.jedrychowski.mydypfacilit.Entity.DiplomaTopic;
@@ -12,7 +14,9 @@ import pl.jedrychowski.mydypfacilit.Wrapper.DiplomaTopicDepartmentIdWrapper;
 import pl.jedrychowski.mydypfacilit.Wrapper.DiplomaTopicListDepartmentWrapper;
 import pl.jedrychowski.mydypfacilit.Wrapper.UserDiplomaTopicListWrapper;
 
+import javax.mail.MessagingException;
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +28,12 @@ public class DiplomaTopicService {
 
     @Autowired
     DAOHibernate daoHibernate;
+
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    SimpleMailMessage templatePromoterChangeDiplomaTopicStatus;
 
     public void saveDiplomaTopic(DiplomaTopicDepartmentIdWrapper diplomaTopicDepartmentIdWrapper) {
 
@@ -146,7 +156,6 @@ public class DiplomaTopicService {
     public void changeDiplomaStatus(Long diplomaId, String statusName) {
         DiplomaTopic diplomaTopic = daoHibernate.getDiplomatopicById(diplomaId);
         Status status = daoHibernate.getStatusByName(statusName);
-
         diplomaTopic.setStatus(status);
         daoHibernate.saveOrUpdateDiplomaTopic(diplomaTopic);
     }
@@ -243,7 +252,7 @@ public class DiplomaTopicService {
         for (User p : promoters) {
             UserDiplomaTopicListWrapper userDiplomaTopicListWrapper = new UserDiplomaTopicListWrapper(new ArrayList<>(), p);
             for (DiplomaTopic t : diplomaTopics) {
-                if(t.getPromoter().equals(p)){
+                if (t.getPromoter().equals(p)) {
                     userDiplomaTopicListWrapper.getDiplomaTopics().add(t);
                 }
             }
@@ -251,14 +260,32 @@ public class DiplomaTopicService {
         }
         return userDiplomaTopicListWrappers;
     }
-}
 
-/*
-//If its promotors topic then create copy of it without promoter and set status to "refused"
-//also remove that student from this diplomaTopic
-        }else if(diplomaTopic.getStatus().equals(daoHibernate.getStatusByName("Temat promotora"))){
-                DiplomaTopic newDiplomatopic = new DiplomaTopic();
-                newDiplomatopic.setStudent(diplomaTopic.getStudent());
-                newDiplomatopic.setSubject("Aplikacja o temat anulowana | " + diplomaTopic.getSubject());
-                newDiplomatopic.setDescription(newDiplomatopic.getPromoter().toString());
-                }*/
+    public void setDiplomaTopicStatusToNeedCorrection(Long id, String content, MultipartFile file) {
+        changeDiplomaStatus(id, "Wymaga poprawy");
+
+        DiplomaTopic diplomaTopic = daoHibernate.getDiplomatopicById(id);
+
+        //send mail
+        if (file.isEmpty()) {
+            emailService.sendEmail(
+                    templatePromoterChangeDiplomaTopicStatus.getFrom(),
+                    diplomaTopic.getStudent().getEmail(),
+                    templatePromoterChangeDiplomaTopicStatus.getSubject(),
+                    String.format(templatePromoterChangeDiplomaTopicStatus.getText(), diplomaTopic.getStatus().getName(), "Wymaga poprawy", "")
+            );
+        } else {
+            try {
+                emailService.sendMessageWithAttachment(
+                        templatePromoterChangeDiplomaTopicStatus.getFrom(),
+                        diplomaTopic.getStudent().getEmail(),
+                        templatePromoterChangeDiplomaTopicStatus.getSubject(),
+                        String.format(templatePromoterChangeDiplomaTopicStatus.getText(), diplomaTopic.getStatus().getName(), "Wymaga poprawy", content),
+                        file
+                );
+            } catch (MessagingException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}

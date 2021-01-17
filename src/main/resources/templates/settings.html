@@ -80,8 +80,7 @@
         <div class="col-2 nopadding bgblack" id="sticky-sidebar">
             <div class="sticky-top ">
                 <!-- Information left site -->
-                <p class="font-white">Zalogowano jako:<br> Imię Nazwisko</p>
-                <p class="font-white">inne informacje</p>
+                <span th:utext="${leftPanelInfo}"> </span>
             </div>
         </div>
 
@@ -173,7 +172,7 @@
                                     <div class="form-row">
                                         <div class="col">
                                             <label for="pass">Wprowadź nowe hasło:</label>
-                                            <input type="password" class="form-control" id="pass"
+                                            <input type="password" class="form-control" id="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                                    placeholder="Wprowadź nowe hasło" minlength="8" maxlength="72" th:name="password" required>
                                             <div class="invalid-feedback">Hasło musi mieć długość minimu 8 a maksimum 72 znaków</div>
                                         </div>

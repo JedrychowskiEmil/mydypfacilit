@@ -34,7 +34,7 @@ public class diplomantController {
         String currentPrincipalEmail = authentication.getName();
         User user = userService.getUserByemail(currentPrincipalEmail);
         model.addAttribute("loggedUser", user);
-
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(user));
         if (user.getStudentTopic() == null) {
             model.addAttribute("diplomaTopic", new DiplomaTopic());
             return "mythesisnotopic";

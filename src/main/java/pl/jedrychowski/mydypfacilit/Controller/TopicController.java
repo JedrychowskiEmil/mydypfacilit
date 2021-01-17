@@ -35,6 +35,7 @@ public class TopicController {
         String currentPrincipalEmail = authentication.getName();
         User user = userService.getUserByemail(currentPrincipalEmail);
         model.addAttribute("loggedUser", user);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(user));
 
         Role roleStudent = userService.getRoleByName("ROLE_STUDENT");
         Role rolePromoter = userService.getRoleByName("ROLE_PROMOTER");

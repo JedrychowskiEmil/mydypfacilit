@@ -6,8 +6,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import pl.jedrychowski.mydypfacilit.Entity.DiplomaTopic;
 import pl.jedrychowski.mydypfacilit.Entity.User;
 import pl.jedrychowski.mydypfacilit.Service.DiplomaTopicService;
@@ -34,6 +36,7 @@ public class StudentsController {
         String currentPrincipalEmail = authentication.getName();
         User user = userService.getUserByemail(currentPrincipalEmail);
         model.addAttribute("loggedUser", user);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(user));
 
         //Get only diploma topics with assigned student
         List<DiplomaTopic> diplomaTopicsWithAssignedStudents =
@@ -60,10 +63,13 @@ public class StudentsController {
         return "redirect:/students";
     }
 
-    //TODO mail + ew plik
-    @GetMapping("/needCorrection")
-    public String markTopicAsneedCorrections(@RequestParam("id") Long id) {
-        diplomaTopicService.changeDiplomaStatus(id, "Wymaga poprawy");
+
+    @PostMapping("/needCorrection")
+    public String markTopicAsneedCorrections(@RequestParam("id") Long id,
+                                             @RequestParam("file") MultipartFile file,
+                                             @RequestParam("content") String content) {
+
+        diplomaTopicService.setDiplomaTopicStatusToNeedCorrection(id, content, file);
         return "redirect:/students";
     }
 

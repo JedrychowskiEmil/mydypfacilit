@@ -79,4 +79,8 @@ html, body {
 
 table { empty-cells: show;}
 
+hr {
+  border-top: 1px solid red;
+}
+
 

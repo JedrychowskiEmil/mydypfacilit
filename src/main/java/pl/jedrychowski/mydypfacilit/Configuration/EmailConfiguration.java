@@ -15,16 +15,40 @@ public class EmailConfiguration {
     private String username;
     @Value("${spring.mail.password}")
     private String password;
+    @Value("${admin.mail.address}")
+    private String fromAddress;
 
     public String getHost() {
         return host;
     }
 
     @Bean
-    public SimpleMailMessage templateSimpleMessage() {
+    public SimpleMailMessage templateCreateAccount() {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Twoje konto zostało utworzone | MyDypFacilit");
+        message.setFrom(fromAddress);
         message.setText(
-                "This is the test email template for your email:\n%s\n");
+                "Twoje konto w aplikacji MyDypFacilit zostało utworzone! \n Twój login: %s\n Twoje hasło: %s\n\n Pamiętaj, że hasło możesz zmienić po zalogowaniu się pod zakładką \"Ustawienia\"");
+        return message;
+    }
+
+    @Bean
+    public SimpleMailMessage templateStatusChange() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Status twojej pracy został zmieniony | MyDypFacilit");
+        message.setFrom(fromAddress);
+        message.setText(
+                "Status twojej pracy w aplikacji MyDypFacilit zostało zmieniony!\n poprzedni status: %s\n nowy status: %s\n\n");
+        return message;
+    }
+
+    @Bean
+    public SimpleMailMessage templatePromoterChangeDiplomaTopicStatus() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Promotor zmienił status twojej pracy | MyDypFacilit");
+        message.setFrom(fromAddress);
+        message.setText(
+                "Twój promotor zmienił status twojej pracy!\n poprzedni status: %s\n nowy status: %s\n\n %s");
         return message;
     }
 

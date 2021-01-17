@@ -21,14 +21,17 @@ public class SettingsController {
 
     @GetMapping("")
     public String settings(Model model) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalEmail = authentication.getName();
         User user = userService.getUserByemail(currentPrincipalEmail);
         model.addAttribute("loggedUser", user);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(user));
+
         return "settings";
     }
 
-    //ma wysylac maila na adres admina
+    //todo ma wysylac maila na adres admina
     //informacja zwrotna
     @PostMapping("/report")
     public String report(@RequestParam("userId") Long userId,

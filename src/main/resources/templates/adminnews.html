@@ -78,8 +78,8 @@
         <!-- Left menu -->
         <div class="col-2 nopadding bgblack" id="sticky-sidebar">
             <div class="sticky-top ">
-                <!-- Informations left site -->
-                <p class="font-white">Zalogowano jako:<br> Imię Nazwisko</p>
+                <!-- Information left site -->
+                <span th:utext="${leftPanelInfo}"> </span>
 
                 <!-- buttons left site -->
                 <div class="dropdown-divider"></div>
@@ -130,7 +130,7 @@
                                 <div class="col-12">
                                     <label for="content">Treść</label>
                                     <textarea class="form-control" th:field="*{content}" id="content"
-                                              rows="8"></textarea>
+                                              rows="8" maxlength="2000"></textarea>
                                 </div>
                             </div>
 

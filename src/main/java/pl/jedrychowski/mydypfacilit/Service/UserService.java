@@ -1,6 +1,7 @@
 package pl.jedrychowski.mydypfacilit.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,15 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private DAOHibernate daoHibernate;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private SimpleMailMessage templateCreateAccount;
+
+    @Autowired
+    private SimpleMailMessage templateStatusChange;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -171,8 +181,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-    //TODO - wyslanie maila z potwierdzeniem
-    //TODO - bcrypt
     private void createNewUser(User user, List<Department> departments, String roleName) {
 
         //set department list
@@ -184,15 +192,18 @@ public class UserService implements UserDetailsService {
         user.setRoles(Collections.singletonList(role));
 
         //Generate and set password
-        /*String password = generatePassword();*/
-        String password = generateFun123();
+        String password = generatePassword();
         user.setPassword(bCryptPasswordEncoder.encode(password));
 
         //Add user to database
         daoHibernate.saveOrUpdateUser(user);
 
-        //TODO - send email with confirmation
-
+        emailService.sendEmail(
+                templateCreateAccount.getFrom(),
+                user.getEmail(),
+                templateCreateAccount.getSubject(),
+                String.format(Objects.requireNonNull(templateCreateAccount.getText()), user.getEmail(), password)
+        );
     }
 
     private void updateUser(User user, List<Department> departments) {
@@ -231,6 +242,11 @@ public class UserService implements UserDetailsService {
             Status status = daoHibernate.getStatusByName("Brak promotora");
             promotorForDiplomas.forEach(x -> x.setStatus(status));
             promotorForDiplomas.forEach(x -> daoHibernate.saveOrUpdateDiplomaTopic(x));
+            for (DiplomaTopic t : promotorForDiplomas) {
+                if (t.getStudent() == null) {
+                    daoHibernate.deleteDiplomatopic(t);
+                }
+            }
         }
 
         //set null to prevent deleting them
@@ -262,6 +278,16 @@ public class UserService implements UserDetailsService {
 
     public void setCustomStatus(Long id, String setstatusto, String newStatusName) {
         User user = daoHibernate.getUserById(id);
+
+        //get old status to put in mail
+        Status oldStatus;
+        if (user.getStudentTopic() != null) {
+            oldStatus = user.getStudentTopic().getStatus();
+        } else {
+            oldStatus = daoHibernate.getStatusByName("Nie wybrano tematu pracy");
+        }
+
+
         Status status;
         if (setstatusto.length() > 0) {
             status = daoHibernate.getStatusByName(setstatusto);
@@ -271,6 +297,15 @@ public class UserService implements UserDetailsService {
         }
         user.getStudentTopic().setStatus(status);
         daoHibernate.saveOrUpdateUser(user);
+
+        //mail
+        emailService.sendEmail(
+                templateStatusChange.getFrom(),
+                user.getEmail(),
+                templateStatusChange.getSubject(),
+                String.format(templateStatusChange.getText(), oldStatus.getName(), status.getName())
+        );
+
     }
 
     public User getUserByemail(String email) {
@@ -305,12 +340,92 @@ public class UserService implements UserDetailsService {
 
     public void removeCustomStatus(String removeStatusName, String changeToStatusName) {
         Status removeStatus = daoHibernate.getStatusByName(removeStatusName);
-        Status changeToStatus = daoHibernate.getStatusByName(changeToStatusName);
+
         List<DiplomaTopic> diplomaTopics = daoHibernate.getDiplomaTopicsByStatusId(removeStatus.getId());
         diplomaTopics.forEach(t -> {
-            t.setStatus(changeToStatus);
-            daoHibernate.saveOrUpdateDiplomaTopic(t);
+            setCustomStatus(t.getStudent().getId(), changeToStatusName, null);
         });
         daoHibernate.deleteStatus(removeStatus.getId());
+    }
+
+    public String getLeftPanelInformations(User user){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<b>Zalogowano jako:<br></b>").append(user).append("<br>");
+        switch (user.getRoles().get(0).getName()){
+            case "ROLE_STUDENT":
+                stringBuilder.append("<hr/>");
+                leftPanelStudent(user, stringBuilder);
+                break;
+            case "ROLE_PROMOTER":
+                stringBuilder.append("<hr/>");
+                leftPanelPromoter(user, stringBuilder);
+                break;
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private StringBuilder leftPanelPromoter(User user, StringBuilder stringBuilder) {
+        stringBuilder.append("<b>Przypisani studenci:<br></b>");
+        List<DiplomaTopic> topics = user.getPromoterTopic();
+        stringBuilder.append("<ul>");
+        for(DiplomaTopic t : topics){
+            if(t.getStudent() != null){
+                stringBuilder.append("<li>");
+                stringBuilder.append(t.getStudent()).append("<br>");
+                stringBuilder.append(t.getStudent().getEmail()).append("<br><br>");
+                stringBuilder.append("</li>");
+            }
+        }
+        stringBuilder.append("</ul>");
+        return stringBuilder;
+    }
+
+    private StringBuilder leftPanelStudent(User user, StringBuilder stringBuilder){
+        stringBuilder.append("<b>Promotor:<br></b>");
+        if(user.getStudentTopic()!=null){
+            if(user.getStudentTopic().getPromoter() != null){
+                stringBuilder.append(user.getStudentTopic().getPromoter()).append("<br>");
+                stringBuilder.append(user.getStudentTopic().getPromoter().getEmail()).append("<br>");
+            }else{
+                stringBuilder.append("Brak promotora").append("<br>");
+            }
+        }else{
+            stringBuilder.append("Brak promotora").append("<br>");
+        }
+        stringBuilder.append("<hr/>");
+        stringBuilder.append("<b>Twoja praca dyplomowa:<br></b>");
+        if(user.getStudentTopic()!=null){
+            stringBuilder.append("<br>Temat:").append("<br>");
+            stringBuilder.append("\"<i>").append(user.getStudentTopic().getSubject()).append("</i>\"<br>");
+            stringBuilder.append("<br>Status pracy:").append("<br>");
+            stringBuilder.append("<span ");
+            switch ((int) user.getStudentTopic().getStatus().getId()){
+                case 2:
+                case 3:
+                    stringBuilder.append("style=\"color: red; font-weight: bold;\">");
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                    stringBuilder.append("style=\"color: white;\">");
+                    break;
+                case 7:
+                    stringBuilder.append("style=\"color: yellow; font-weight: bold;\">");
+                    break;
+                case 8:
+                case 9:
+                    stringBuilder.append("style=\"color: green; font-weight: bold;\">");
+                    break;
+                default:
+                    stringBuilder.append("style=\"color: orange; font-weight: bold;\">");
+                    break;
+            }
+            stringBuilder.append(user.getStudentTopic().getStatus().getName()).append("<br>");
+            stringBuilder.append("</span>");
+        }else{
+            stringBuilder.append("<br>Nie wybrałeś jeszcze tematu swojej pracy dyplomowej").append("<br>");
+        }
+        return stringBuilder;
     }
 }

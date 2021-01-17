@@ -179,7 +179,6 @@ public class DAOHibernate {
     }
 
 
-    //TODO - do ogarniecia dodac tabele encje relacje statusow, ogarnac statusy
     @Transactional
     public List<Status> getStatuses() {
         Session session = entityManager.unwrap(Session.class);

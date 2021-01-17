@@ -1,8 +1,6 @@
 package pl.jedrychowski.mydypfacilit.Service;
 
-import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -16,7 +14,6 @@ import javax.activation.FileDataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -26,8 +23,6 @@ public class EmailService  {
     @Autowired
     private EmailConfiguration emailConfiguration;
 
-    @Autowired
-    public SimpleMailMessage template;
 
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSenderImpl = new JavaMailSenderImpl();
@@ -38,12 +33,12 @@ public class EmailService  {
         return mailSenderImpl;
     }
 
-    public void sendEmail(String from, String to, String body, String topic){
+    public void sendEmail(String from, String to, String topic, String text){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(from);
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject(topic);
-        simpleMailMessage.setText(body);
+        simpleMailMessage.setText(text);
         getJavaMailSender().send(simpleMailMessage);
     }
 
@@ -57,7 +52,7 @@ public class EmailService  {
         helper.setFrom(from);
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(template.getText());
+        helper.setText(text);
 
         DataSource source = new FileDataSource(new File(file.getName()));
         byte[] sourceBytes = file.getBytes();

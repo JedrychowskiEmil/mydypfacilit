@@ -1,6 +1,8 @@
 package pl.jedrychowski.mydypfacilit.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,6 @@ import java.io.IOException;
 import java.util.*;
 
 //TODO dodac limit znakow w formularzach i pod nimi diva https://da-software.net/en/2020/01/limit-the-number-of-characters-in-the-text-field-of-an-html-form/
-//TODO email wprowadzany ma byc malymi, imie naziwso zaczynac z duzych awsze
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -37,21 +38,28 @@ public class AdminController {
     //TODO - informacje po lewej
     @GetMapping("")
     public String adminPanelHome(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
         return "admintools";
     }
 
 
     //#################################### STUDENTS ####################################
 
-    //TODO - przeniesc status na kolumne status pracy, ma sie pojawiac tylko jak ktos ma temat
-    //Zmiana statusu ma wysylac maila, usuniecie tez
+    //TODO
     //feedbacki
-    //usuwanie statusow zmieniajac status na zatwierdzony przez promotora
     @GetMapping("/students")
     public String adminStudents(@RequestParam(value = "id", required = false) Long id,
                                 @RequestParam(value = "filterDepartmentId", required = false) Long filterDepartmentId,
                                 @RequestParam(value = "filterStatusId", required = false) Long filterStatusId,
                                 Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
+
         List<Department> departments = daoHibernate.getDepartments();
         model.addAttribute("departments", departments);
 
@@ -100,7 +108,6 @@ public class AdminController {
         return "redirect:/admin/students";
     }
 
-    //todo mail
     @GetMapping("student/setstatus")
     public String setStatus(@RequestParam("id") Long id,
                             @RequestParam(value = "filterDepartmentId", required = false) Long filterDepartmentId,
@@ -110,9 +117,9 @@ public class AdminController {
                             @RequestParam(value = "add") Boolean add,
                             RedirectAttributes redirectAttributes) {
 
-        if(add) {
+        if (add) {
             userService.setCustomStatus(id, setstatusto, newStatusName);
-        }else if(!setstatusto.isEmpty()){
+        } else if (!setstatusto.isEmpty()) {
             userService.removeCustomStatus(setstatusto, "Praca zatwierdzona przez promotora");
         }
         redirectAttributes.addAttribute("filterDepartmentId", filterDepartmentId);
@@ -128,6 +135,11 @@ public class AdminController {
     public String adminStaff(@RequestParam(value = "id", required = false) Long id,
                              @RequestParam(value = "show", required = false) boolean showStudents,
                              Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
 
         //fill form
         User user;
@@ -157,7 +169,6 @@ public class AdminController {
         return "adminStaff";
     }
 
-//todo - mail przy twoprzeni
     @PostMapping("staff/save")
     public String saveStaff(@ModelAttribute UserDepartmentListWrapper user,
                             @ModelAttribute BooleanWrapper showUsers,
@@ -168,7 +179,7 @@ public class AdminController {
         return "redirect:/admin/staff";
     }
 
-    //todo test
+    //todo temat promotora zmienic nazwe bezpiecznie
     @GetMapping("staff/delete")
     public String deleteStaff(@RequestParam("id") Long id,
                               @RequestParam(value = "show", required = false) boolean showStudents,
@@ -180,17 +191,22 @@ public class AdminController {
 
 
     //#################################### GROUPS ####################################
-    //TODO - sortowanie tak aby profesorowie pojawiali się pierwsi
     //TODO - zamienić requesty na POSTY zmieniajac hrefy w button z ukrytymi inputami
+    //feedback
     @GetMapping("/groups")
     public String adminGrupy(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
+
         model.addAttribute("newDepartment", new Department());
 
         List<Department> departments = daoHibernate.getDepartments();
         departments.forEach(d -> d.getUsers().sort(User::compareToWithRole));
         model.addAttribute("departments", departments);
 
-        ShowOption showOption = new ShowOption(true, true);
+        ShowOption showOption = new ShowOption(false, false);
 
         model.addAttribute("showOption", showOption);
 
@@ -201,6 +217,11 @@ public class AdminController {
     public String saveGroup(@ModelAttribute("department") Department department,
                             @ModelAttribute("showOption") ShowOption showOption,
                             Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
+
         daoHibernate.saveDepartment(department);
 
         model.addAttribute("newDepartment", new Department());
@@ -215,6 +236,11 @@ public class AdminController {
 
     @PostMapping("groupOptionSwap")
     public String groupOptionSwap(@ModelAttribute("showOption") ShowOption showOption, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
+
         model.addAttribute("newDepartment", new Department());
 
         List<Department> departments = daoHibernate.getDepartments();
@@ -231,6 +257,11 @@ public class AdminController {
                               @RequestParam("showStaff") boolean showStaff,
                               @RequestParam("showStudents") boolean showStudents,
                               Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
+
         Department department = daoHibernate.getDepartmentById(id);
         model.addAttribute("newDepartment", department);
 
@@ -247,6 +278,11 @@ public class AdminController {
                               @RequestParam("showStaff") boolean showStaff,
                               @RequestParam("showStudents") boolean showStudents,
                               Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
+
         daoHibernate.deleteDepartmentById(id);
 
         model.addAttribute("newDepartment", new Department());
@@ -260,10 +296,14 @@ public class AdminController {
     }
 
     //#################################### NEWS ####################################
-    //TODO - zwiekszyc limit znakow do 2k w content
+    //todo feedback
     @GetMapping("/news")
     public String adminNews(@RequestParam(value = "id", required = false) Long id,
                             Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
 
         //get all news and add to model
         List<News> news = daoHibernate.getNews();
@@ -297,14 +337,19 @@ public class AdminController {
 
 
     //#################################### STEPS ####################################
-    //todo podlinkowac strone steps
+    //todo feedback
     @GetMapping("/steps")
     public String adminSteps(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        User loggedUser = userService.getUserByemail(currentPrincipalEmail);
+        model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
 
-        File file = new File("C:\\Users\\jedry\\Downloads\\mydypfacilit (1)\\mydypfacilit\\src\\main\\resources\\steps.txt");
+        File path = new File("");
+        File file = new File(path.getAbsolutePath() + "\\src\\main\\resources\\steps.txt");
         String content = "";
         try {
-            if(file.length() != 0) {
+            if (file.length() != 0) {
                 content = new Scanner(file).useDelimiter("\\Z").next();
             }
             model.addAttribute("content", content);
@@ -318,15 +363,15 @@ public class AdminController {
     }
 
     @PostMapping("/steps/save")
-    public String saveSteps(@RequestParam String content, Model model){
-        System.out.println(content);
-        File file = new File("C:\\Users\\jedry\\Downloads\\mydypfacilit (1)\\mydypfacilit\\src\\main\\resources\\steps.txt");
+    public String saveSteps(@RequestParam String content, Model model) {
+        File path = new File("");
+        File file = new File(path.getAbsolutePath() + "\\src\\main\\resources\\steps.txt");
         FileWriter fileWriter;
         try {
             fileWriter = new FileWriter(file);
             fileWriter.write(content);
             fileWriter.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return "redirect:/admin/steps";
