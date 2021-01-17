@@ -28,6 +28,8 @@ public class SettingsController {
         return "settings";
     }
 
+    //ma wysylac maila na adres admina
+    //informacja zwrotna
     @PostMapping("/report")
     public String report(@RequestParam("userId") Long userId,
                          @RequestParam("content") String content,
@@ -38,6 +40,7 @@ public class SettingsController {
         return "redirect:/settings";
     }
 
+    //TODO zwrot errora jak hasla zle, mail po zmianie hasla
     @PostMapping("/changePassword")
     public String changePassword(@RequestParam("password") String password,
                                  @RequestParam("password2") String password2,

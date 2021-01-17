@@ -28,7 +28,7 @@ public class UserService implements UserDetailsService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public boolean changePassword(User user, String password, String password2) {
-        if(!password.equals(password2))return false;
+        if (!password.equals(password2)) return false;
 
         user.setPassword(bCryptPasswordEncoder.encode(password));
         daoHibernate.saveOrUpdateUser(user);
@@ -125,7 +125,7 @@ public class UserService implements UserDetailsService {
         for (User promoter : promoters) {
             PromoterStudentListWrapper promoterStudentListWrapper = new PromoterStudentListWrapper(promoter, new ArrayList<>());
             for (User student : studentsWithTopics) {
-                if(student.getStudentTopic().getPromoter() == promoter){
+                if (student.getStudentTopic().getPromoter() == promoter) {
                     promoterStudentListWrapper.getStudents().add(student);
                 }
             }
@@ -140,10 +140,10 @@ public class UserService implements UserDetailsService {
 
     public void createOrUpdateUser(UserDepartmentWrapper userDepartmentWrapper, String role) {
         User user = userDepartmentWrapper.getUser();
-        if(userDepartmentWrapper.getDepartmentId() != null){
+        if (userDepartmentWrapper.getDepartmentId() != null) {
             Department department = daoHibernate.getDepartmentById(userDepartmentWrapper.getDepartmentId());
             createOrUpdateUser(user, Collections.singletonList(department), role);
-        }else{
+        } else {
             createOrUpdateUser(user, null, role);
         }
 
@@ -210,20 +210,20 @@ public class UserService implements UserDetailsService {
         daoHibernate.saveOrUpdateUser(oldUser);
     }
 
-    public void deleteUserById(Long id, String roleName){
+    public void deleteUserById(Long id, String roleName) {
         User user = daoHibernate.getUserById(id);
 
         Role role = daoHibernate.getRoleByName(roleName);
 
         //get diplomaTitle and set promotor to null to prevent promot from being deleted
-        if(role.getName().equals("ROLE_STUDENT")){
+        if (role.getName().equals("ROLE_STUDENT")) {
             DiplomaTopic diplomaTopic = user.getStudentTopic();
-            if(diplomaTopic != null) {
+            if (diplomaTopic != null) {
                 diplomaTopic.setPromoter(null);
                 daoHibernate.deleteDiplomatopic(diplomaTopic);
             }
 
-        }else if(role.getName().equals("ROLE_PROMOTER")){
+        } else if (role.getName().equals("ROLE_PROMOTER")) {
 
             //get all diplomaTitles user promotes set promotor field to null, change status and update them
             List<DiplomaTopic> promotorForDiplomas = daoHibernate.getDiplomaTopicsByPromotorId(user.getId());
@@ -256,16 +256,16 @@ public class UserService implements UserDetailsService {
 
     }
 
-    private String generateFun123(){
+    private String generateFun123() {
         return "fun123";
     }
 
     public void setCustomStatus(Long id, String setstatusto, String newStatusName) {
-            User user = daoHibernate.getUserById(id);
-            Status status;
-        if(setstatusto.length() > 0){
+        User user = daoHibernate.getUserById(id);
+        Status status;
+        if (setstatusto.length() > 0) {
             status = daoHibernate.getStatusByName(setstatusto);
-        }else {
+        } else {
             status = new Status();
             status.setName(newStatusName);
         }
@@ -301,5 +301,16 @@ public class UserService implements UserDetailsService {
 
     public Role getRoleByName(String role_promoter) {
         return daoHibernate.getRoleByName(role_promoter);
+    }
+
+    public void removeCustomStatus(String removeStatusName, String changeToStatusName) {
+        Status removeStatus = daoHibernate.getStatusByName(removeStatusName);
+        Status changeToStatus = daoHibernate.getStatusByName(changeToStatusName);
+        List<DiplomaTopic> diplomaTopics = daoHibernate.getDiplomaTopicsByStatusId(removeStatus.getId());
+        diplomaTopics.forEach(t -> {
+            t.setStatus(changeToStatus);
+            daoHibernate.saveOrUpdateDiplomaTopic(t);
+        });
+        daoHibernate.deleteStatus(removeStatus.getId());
     }
 }

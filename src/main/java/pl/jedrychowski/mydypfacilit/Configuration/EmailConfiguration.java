@@ -1,6 +1,8 @@
 package pl.jedrychowski.mydypfacilit.Configuration;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +18,14 @@ public class EmailConfiguration {
 
     public String getHost() {
         return host;
+    }
+
+    @Bean
+    public SimpleMailMessage templateSimpleMessage() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setText(
+                "This is the test email template for your email:\n%s\n");
+        return message;
     }
 
     public void setHost(String host) {

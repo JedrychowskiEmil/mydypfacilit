@@ -28,6 +28,7 @@ public class TopicController {
     @Autowired
     private DiplomaTopicService diplomaTopicService;
 
+    //TODO - feedback
     @GetMapping("")
     public String topics(@RequestParam(value = "id", required = false) Long id, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -97,19 +98,21 @@ public class TopicController {
         return "redirect:/topics";
     }
 
+    //TODO - mail, feedback
     @GetMapping("/acceptTopic")
     public String acceptTopic(@RequestParam("id") Long id) {
         diplomaTopicService.changeDiplomaStatus(id, "W trakcie pisania pracy");
         return "redirect:/topics";
     }
 
-    //todo - mail z odrzuceniem tresc
+    //TODO - mail z odrzuceniem tresc
     @GetMapping("/refuseTopic")
     public String refuseTopic(@RequestParam("id") Long id) {
         diplomaTopicService.refuseTopic(id);
         return "redirect:/topics";
     }
 
+    //TODO feedback
     @GetMapping("/deleteTopic")
     public String deleteTopic(@RequestParam("id") Long id) {
         diplomaTopicService.deleteTopicById(id);

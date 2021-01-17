@@ -275,4 +275,27 @@ public class DAOHibernate {
 
         return diplomaTopics != null ? diplomaTopics : new ArrayList<>();
     }
+
+    @Transactional
+    public List<DiplomaTopic> getDiplomaTopicsByStatusId(long id) {
+        Session session = entityManager.unwrap(Session.class);
+        List<DiplomaTopic> diplomaTopics =
+                session.createQuery("select t from DiplomaTopic t join t.status s where s.id=:id", DiplomaTopic.class).setParameter("id", id).getResultList();
+        return diplomaTopics != null ? diplomaTopics : new ArrayList<>();
+    }
+
+    @Transactional
+    public void deleteStatus(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        Status status = getStatusById(id);
+        if (status != null) {
+            session.delete(status);
+        }
+    }
+
+    @Transactional
+    private Status getStatusById(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.get(Status.class, id);
+    }
 }

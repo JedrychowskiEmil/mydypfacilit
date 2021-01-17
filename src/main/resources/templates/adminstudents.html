@@ -57,7 +57,8 @@
                 </li>
                 <li class="nav-item">
                     <form action="#" th:action="@{/logout}" method="POST">
-                        <button class="btn btn-link nav-link" type="submit"><i class="fas fa-sign-out-alt"></i> Wyloguj</button>
+                        <button class="btn btn-link nav-link" type="submit"><i class="fas fa-sign-out-alt"></i> Wyloguj
+                        </button>
                     </form>
                 </li>
             </ul>
@@ -188,18 +189,19 @@
                             <li><b>Automatycznie zostanie wygenerowane losowe <i style="font-weight: 900;">silne</i>
                                 hasło które zostanie dołączone do wiadomości email</b></li>
                             <br>
+                            <p><b>Akcje modyfikujące status pracy studenta są dostępne dopiero po zaakceptowaniu pracy przez promotora</b></p>
                             <button type="button" class="btn btn-success btn-sm"><i class="fas fa-check"></i>
                             </button>
-                            <a style="font-weight: 500;">Ustaw status pracy na "Praca przyjęta i zatwierdzona"</a>
+                            <span style="font-weight: 500;">Ustaw status pracy na "Praca przyjęta i zatwierdzona"</span>
                             <br>
                             <button type="button" class="btn btn-warning btn-sm"><i class="fas fa-cog"></i></button>
-                            <a style="font-weight: 500;">Modyfikuj rekord</a>
+                            <span style="font-weight: 500;">Modyfikuj rekord</span>
                             <br>
                             <button type="button" class="btn btn-danger btn-sm"><i class="fas fa-ban"></i></button>
-                            <a style="font-weight: 500;">Usuń rekord</a>
+                            <span style="font-weight: 500;">Usuń rekord</span>
                             <br>
                             <button class="btn btn-secondary btn-sm"><i class="fas fa-pen"></i></button>
-                            <a style="font-weight: 500;">Ustaw inny niestandardowy status pracy</a>
+                            <span style="font-weight: 500;">Ustaw inny niestandardowy status pracy</span>
                         </ul>
                     </div>
                 </div>
@@ -263,19 +265,20 @@
                             <div th:each="department : ${departmentsOnlyStudents}">
                                 <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col" colspan="6" style="text-align: center;">
+                                    <th scope="col" colspan="7" style="text-align: center;">
                                         <a th:text="${department.department}"></a>
                                     </th>
                                 </tr>
                                 </thead>
                                 <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Imię i nazwisko</th>
-                                    <th scope="col">E-mail</th>
-                                    <th scope="col">Promotor</th>
-                                    <th scope="col">Status pracy</th>
-                                    <th scope="col">Akcje</th>
+                                    <th scope="col" style="width: 5%">#</th>
+                                    <th scope="col" style="width: 15%">Imię i nazwisko</th>
+                                    <th scope="col" style="width: 10%">E-mail</th>
+                                    <th scope="col" style="width: 15%">Promotor</th>
+                                    <th scope="col" style="width: 20%">Temat pracy</th>
+                                    <th scope="col" style="width: 25%">Status pracy</th>
+                                    <th scope="col" style="width: 10%">Akcje</th>
                                 </tr>
                                 </thead>
 
@@ -286,16 +289,28 @@
                                         <span th:text="${user.lastName}"></span>
                                     </td>
                                     <td><span th:text="${user.email}"></span></td>
-                                    <td><span th:text="${user?.studentTopic?.promoter?.firstName}"></span></td>
-                                    <td><span
-                                            th:text="${user?.studentTopic != null} ? ${user.studentTopic.status.name} : 'Nie wybrano tematu pracy'"></span>
+                                    <td><span th:text="${user?.studentTopic?.promoter}"></span></td>
+                                    <td><span th:text="${user?.studentTopic?.subject}"></span></td>
+                                    <td>
+                                        <span th:text="${user?.studentTopic != null} ? ${user.studentTopic.status.name} : 'Nie wybrano tematu pracy'"></span>
+                                        <div class="float-right" th:if="${user?.studentTopic?.status?.id > 7}">
+                                                <button type="button"
+                                                        class="btn btn-success btn-sm"
+                                                        data-toggle="modal"
+                                                        data-target="#confirmConfirm"
+                                                        th:attrappend="data-target=${user.id}"
+                                                th:disabled="${user?.studentTopic?.status?.id == 9}">
+                                                        <i class="fas fa-check"></i>
+                                                </button>
+
+                                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                                    data-target="#changeStatus"
+                                                    th:attrappend="data-target=${user.id}">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                        </div>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                                data-target="#confirmConfirm" th:attrappend="data-target=${user.id}, ">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-
                                         <a th:href="@{/admin/students(id=${user.id}, filterDepartmentId=${filterUsers.filterDepartmentId}, filterStatusId=${filterUsers.filterStatusId})}"
                                            class="btn btn-warning btn-sm"><i class="fas fa-cog"></i>
                                         </a>
@@ -303,11 +318,6 @@
                                                 data-target="#deleteConfirm" th:attrappend="data-target=${user.id}, ">
                                             <i class="fas fa-ban"></i>
                                         </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                                data-target="#changeStatus" th:attrappend="data-target=${user.id}, ">
-                                            <i class="fas fa-pen"></i>
-                                        </button>
-
                                     </td>
                                 </tr>
 
@@ -322,13 +332,14 @@
                                                 <h4 class="modal-title" id="changeStatusTitle">Potwierdź czynność</h4>
                                             </div>
                                             <div class="modal-body">
-                                                Czy na pewno chcesz zmienić status tej pracy na "Praca przyjęta i zatwierdzona"?
+                                                Czy na pewno chcesz zmienić status tej pracy na "Praca przyjęta i
+                                                zatwierdzona"?
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">
                                                     Anuluj
                                                 </button>
-                                                <a th:href="@{/admin/student/setstatus(id=${user.id}, setstatusto='Praca przyjęta i zatwierdzona', filterDepartmentId=${filterUsers.filterDepartmentId}, filterStatusId=${filterUsers.filterStatusId})}"
+                                                <a th:href="@{/admin/student/setstatus(id=${user.id},add=false, setstatusto='Praca przyjęta i zatwierdzona', filterDepartmentId=${filterUsers.filterDepartmentId}, filterStatusId=${filterUsers.filterStatusId})}"
                                                    class="btn btn-success btn-sm">Potwierdź</i>
                                                 </a>
                                             </div>
@@ -337,7 +348,7 @@
                                 </div>
 
 
-                                <!-- Confirm Delete Group - Button -->
+                                <!-- Confirm Delete - Button -->
                                 <div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog"
                                      aria-labelledby="deleteConfirmLabel" th:attrappend="id=${user.id}">
                                     <div class="modal-dialog" role="document">
@@ -385,10 +396,10 @@
 
                                                         <select class="form-control" id="changeStatusTo"
                                                                 th:name="setstatusto"
-                                                                th:readonly="${#lists.size(statuses) <= 7}">
+                                                                th:readonly="${#lists.size(statuses) <= 9}">
                                                             <option th:value="null" th:text="'-'"></option>
                                                             <option th:each="status : ${statuses}"
-                                                                    th:if="${status.id} > 7"
+                                                                    th:if="${status.id} > 9"
                                                                     th:value="${status.name}"
                                                                     th:text="${status.name}"></option>
                                                         </select>
@@ -413,11 +424,14 @@
                                                 </div>
 
                                                 <div class="modal-footer">
+                                                    <span class="float-left-absolute">
+                                                        <button type="submit" th:name="add" th:value="false" class="btn btn-danger btn-sm" onclick="clicked();">Usuń wybrany status</button>
+                                                    </span>
                                                     <button type="button" class="btn btn-default btn-sm"
                                                             data-dismiss="modal">
                                                         Anuluj
                                                     </button>
-                                                    <button type="submit" class="btn btn-success">Ustaw status</button>
+                                                    <button type="submit" th:name="add" th:value="true" class="btn btn-success btn-sm">Ustaw status</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -475,18 +489,19 @@
     });
   }, false);
 })();
+</script>
 
-
-
-
-
-
-
-
-
-
+<script type="text/javascript">
+    function clicked() {
+       if (confirm('Czy na pewno chcesz usunąć status??')) {
+           yourformelement.submit();
+       } else {
+           return false;
+       }
+    }
 
 </script>
+
 </body>
 
 </html>

@@ -34,6 +34,7 @@ public class AdminController {
         this.newsService = newsService;
     }
 
+    //TODO - informacje po lewej
     @GetMapping("")
     public String adminPanelHome(Model model) {
         return "admintools";
@@ -42,6 +43,10 @@ public class AdminController {
 
     //#################################### STUDENTS ####################################
 
+    //TODO - przeniesc status na kolumne status pracy, ma sie pojawiac tylko jak ktos ma temat
+    //Zmiana statusu ma wysylac maila, usuniecie tez
+    //feedbacki
+    //usuwanie statusow zmieniajac status na zatwierdzony przez promotora
     @GetMapping("/students")
     public String adminStudents(@RequestParam(value = "id", required = false) Long id,
                                 @RequestParam(value = "filterDepartmentId", required = false) Long filterDepartmentId,
@@ -95,15 +100,21 @@ public class AdminController {
         return "redirect:/admin/students";
     }
 
+    //todo mail
     @GetMapping("student/setstatus")
     public String setStatus(@RequestParam("id") Long id,
                             @RequestParam(value = "filterDepartmentId", required = false) Long filterDepartmentId,
                             @RequestParam(value = "filterStatusId", required = false) Long filterStatusId,
                             @RequestParam(value = "setstatusto", required = false) String setstatusto,
                             @RequestParam(value = "newStatusName", required = false) String newStatusName,
+                            @RequestParam(value = "add") Boolean add,
                             RedirectAttributes redirectAttributes) {
 
-        userService.setCustomStatus(id, setstatusto, newStatusName);
+        if(add) {
+            userService.setCustomStatus(id, setstatusto, newStatusName);
+        }else if(!setstatusto.isEmpty()){
+            userService.removeCustomStatus(setstatusto, "Praca zatwierdzona przez promotora");
+        }
         redirectAttributes.addAttribute("filterDepartmentId", filterDepartmentId);
         redirectAttributes.addAttribute("filterStatusId", filterStatusId);
 
@@ -112,6 +123,7 @@ public class AdminController {
 
     //#################################### STAFF ####################################
 
+    //todo feedbacki
     @GetMapping("/staff")
     public String adminStaff(@RequestParam(value = "id", required = false) Long id,
                              @RequestParam(value = "show", required = false) boolean showStudents,
@@ -145,7 +157,7 @@ public class AdminController {
         return "adminStaff";
     }
 
-
+//todo - mail przy twoprzeni
     @PostMapping("staff/save")
     public String saveStaff(@ModelAttribute UserDepartmentListWrapper user,
                             @ModelAttribute BooleanWrapper showUsers,
@@ -156,6 +168,7 @@ public class AdminController {
         return "redirect:/admin/staff";
     }
 
+    //todo test
     @GetMapping("staff/delete")
     public String deleteStaff(@RequestParam("id") Long id,
                               @RequestParam(value = "show", required = false) boolean showStudents,
@@ -284,6 +297,7 @@ public class AdminController {
 
 
     //#################################### STEPS ####################################
+    //todo podlinkowac strone steps
     @GetMapping("/steps")
     public String adminSteps(Model model) {
 

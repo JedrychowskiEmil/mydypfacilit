@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pl.jedrychowski.mydypfacilit.EmailService;
+import pl.jedrychowski.mydypfacilit.Service.EmailService;
 import pl.jedrychowski.mydypfacilit.Entity.DiplomaTopic;
 import pl.jedrychowski.mydypfacilit.Entity.User;
 import pl.jedrychowski.mydypfacilit.Service.DiplomaTopicService;
@@ -103,6 +103,8 @@ public class diplomantController {
         return "redirect:/mythesis";
     }
 
+
+    //todo feedback
     @PostMapping("/sendmailwithfile")
     public String sendmailwithfile(@RequestParam("file")MultipartFile file,
                                    @RequestParam("content") String content){

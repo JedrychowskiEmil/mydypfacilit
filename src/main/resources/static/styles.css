@@ -38,6 +38,11 @@ html, body {
   top: 3px;
 }
 
+.float-left-absolute {
+  position: absolute;
+  left: 16px;
+}
+
 .btn-black {
     color: white;
     background-color: black;

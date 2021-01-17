@@ -1,4 +1,4 @@
-package pl.jedrychowski.mydypfacilit;
+package pl.jedrychowski.mydypfacilit.Service;
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,9 @@ public class EmailService  {
     @Autowired
     private EmailConfiguration emailConfiguration;
 
+    @Autowired
+    public SimpleMailMessage template;
+
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSenderImpl = new JavaMailSenderImpl();
         mailSenderImpl.setHost(emailConfiguration.getHost());
@@ -51,10 +54,10 @@ public class EmailService  {
 
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setFrom("noreply@baeldung.com");
+        helper.setFrom(from);
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(text);
+        helper.setText(template.getText());
 
         DataSource source = new FileDataSource(new File(file.getName()));
         byte[] sourceBytes = file.getBytes();

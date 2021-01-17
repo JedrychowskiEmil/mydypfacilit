@@ -53,18 +53,21 @@ public class StudentsController {
         return "students";
     }
 
+    //TODO - mail
     @GetMapping("/acceptTopicMarkFinished")
     public String markTopicAsFinished(@RequestParam("id") Long id) {
         diplomaTopicService.changeDiplomaStatus(id, "Praca zatwierdzona przez promotora");
         return "redirect:/students";
     }
 
+    //TODO mail + ew plik
     @GetMapping("/needCorrection")
     public String markTopicAsneedCorrections(@RequestParam("id") Long id) {
         diplomaTopicService.changeDiplomaStatus(id, "Wymaga poprawy");
         return "redirect:/students";
     }
 
+    //TODO mail
     @GetMapping("/resign")
     public String resignFromTopic(@RequestParam("id") Long id) {
         diplomaTopicService.resignFromTopic(id);
