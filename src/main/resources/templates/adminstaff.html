@@ -190,11 +190,15 @@
                                 hasło które zostanie dołączone do wiadomości email</b></li>
                             <br>
                             <span class="btn btn-warning btn-sm"><i class="fas fa-cog"></i></span>
-                            <a style="font-weight: 500;">Modyfikuj rekord</a>
+                            <span style="font-weight: 500;">Modyfikuj rekord</span>
                             <br>
                             <span class="btn btn-danger btn-sm"><i class="fas fa-ban"></i></span>
-                            <a style="font-weight: 500;">Usuń rekord</a>
+                            <span style="font-weight: 500;">Usuń rekord</span>
                             <br>
+                            <button type="button" class="btn btn-primary btn-sm">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                            <span style="font-weight: 500;">Wyślij wiadomość do pracownika</span>
                     </div>
                 </div>
                 <!-- 2nd row -->
@@ -254,6 +258,9 @@
                                                 th:attrappend="data-target=${promoter.promoter.id}, ">
                                             <i class="fas fa-ban"></i>
                                         </button>
+                                    <button type="button" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-envelope"></i>
+                                    </button>
                                     </td>
                                 </tr>
 

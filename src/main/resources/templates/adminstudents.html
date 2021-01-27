@@ -202,6 +202,16 @@
                             <br>
                             <button class="btn btn-secondary btn-sm"><i class="fas fa-pen"></i></button>
                             <span style="font-weight: 500;">Ustaw inny niestandardowy status pracy</span>
+                            <br>
+                            <button type="button" class="btn btn-primary btn-sm">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                            <span style="font-weight: 500;">Wyślij wiadomość do studenta</span>
+                            <br>
+                            <button type="button" class="btn btn-primary btn-sm">
+                                <i class="fas fa-mail-bulk"></i>
+                            </button>
+                            <span style="font-weight: 500;">Wyślij wiadomość do wszystkich studentów w tej grupie</span>
                         </ul>
                     </div>
                 </div>
@@ -266,7 +276,10 @@
                                 <thead class="thead-dark">
                                 <tr>
                                     <th scope="col" colspan="7" style="text-align: center;">
-                                        <a th:text="${department.department}"></a>
+                                        <span th:text="${department.department}"></span>
+                                        <button type="button" class="btn btn-primary btn-sm float-right">
+                                            <i class="fas fa-mail-bulk"></i>
+                                        </button>
                                     </th>
                                 </tr>
                                 </thead>
@@ -288,7 +301,9 @@
                                     <td><span th:text="${user.firstName}"></span>
                                         <span th:text="${user.lastName}"></span>
                                     </td>
-                                    <td><span th:text="${user.email}"></span></td>
+                                    <td>
+                                        <span th:text="${user.email}"></span>
+                                    </td>
                                     <td><span th:text="${user?.studentTopic?.promoter}"></span></td>
                                     <td><span th:text="${user?.studentTopic?.subject}"></span></td>
                                     <td>
@@ -317,6 +332,9 @@
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                                 data-target="#deleteConfirm" th:attrappend="data-target=${user.id}, ">
                                             <i class="fas fa-ban"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-envelope"></i>
                                         </button>
                                     </td>
                                 </tr>

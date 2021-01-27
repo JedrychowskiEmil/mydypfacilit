@@ -1,7 +1,6 @@
 package pl.jedrychowski.mydypfacilit.Entity;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 
 @Entity

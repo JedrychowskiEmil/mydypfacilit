@@ -373,8 +373,11 @@ public class UserService implements UserDetailsService {
             if(t.getStudent() != null && t.getStatus().getId() > 5){
                 stringBuilder.append("<li>");
                 stringBuilder.append(t.getStudent()).append("<br>");
-                stringBuilder.append(t.getStudent().getEmail()).append("<br><br>");
-                stringBuilder.append("</li>");
+                stringBuilder.append(t.getStudent().getEmail());
+                stringBuilder.append(" <button type=\"button\" class=\"btn btn-outline-primary btn-sm\">" +
+                        "<i class=\"fas fa-envelope\"></i>\n" +
+                        "</button>").append("<br>");
+                stringBuilder.append("</li>").append("<br>");
             }
         }
         stringBuilder.append("</ul>");
@@ -386,7 +389,10 @@ public class UserService implements UserDetailsService {
         if(user.getStudentTopic()!=null){
             if(user.getStudentTopic().getPromoter() != null){
                 stringBuilder.append(user.getStudentTopic().getPromoter()).append("<br>");
-                stringBuilder.append(user.getStudentTopic().getPromoter().getEmail()).append("<br>");
+                stringBuilder.append(user.getStudentTopic().getPromoter().getEmail());
+                stringBuilder.append(" <button type=\"button\" class=\"btn btn-outline-primary btn-sm\">" +
+                        "<i class=\"fas fa-envelope\"></i>\n" +
+                        "</button>").append("<br>");
             }else{
                 stringBuilder.append("Brak promotora").append("<br>");
             }

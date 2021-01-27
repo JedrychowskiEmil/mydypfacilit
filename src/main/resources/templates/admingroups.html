@@ -185,6 +185,10 @@
                             <button type="button" class="btn btn-danger btn-sm"><i class="fas fa-ban"></i></button>
                             <a style="font-weight: 500;">Usuń rekord</a>
                             <br>
+                            <button type="button" class="btn btn-primary btn-sm">
+                                <i class="fas fa-mail-bulk"></i>
+                            </button>
+                            <a style="font-weight: 500;">Wyślij wiadomość do wszystkich użytkowników przypisanych do tej grupy</a>
                     </div>
                 </div>
                 <!-- 2nd row -->
@@ -222,12 +226,12 @@
 
                             <thead class="thead-dark">
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col" style="width: 5%">#</th>
                                 <th scope="col">Wydział</th>
                                 <th scope="col">Kierunek</th>
                                 <th scope="col">Tryb</th>
                                 <th scope="col">Grupa</th>
-                                <th scope="col">Akcje</th>
+                                <th scope="col" style="width: 10%">Akcje</th>
                             </tr>
                             </thead>
                             <tbody th:each="department : ${departments}">
@@ -245,6 +249,10 @@
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                             data-target="#deleteConfirm" th:attrappend="data-target=${department.id}, ">
                                         <i class="fas fa-ban"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-mail-bulk"></i>
                                     </button>
                                 </td>
                             </tr>
