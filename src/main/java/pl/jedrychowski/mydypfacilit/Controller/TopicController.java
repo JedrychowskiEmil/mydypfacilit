@@ -59,9 +59,9 @@ public class TopicController {
                     diplomaTopicService.splitDiplomaListByStatus(studentNullStudentNotNull.getSecond(),
                             Arrays.asList(
                                     "Zaproponowano temat",
-                                    "Temat promotora"
+                                    "Aplikowano o Temat promotora"
                             ));
-            withStatusWithoutStatus = diplomaTopicService.splitDiplomaListByStatus(withStatusWithoutStatus.getFirst(), Collections.singletonList("Temat promotora"));
+            withStatusWithoutStatus = diplomaTopicService.splitDiplomaListByStatus(withStatusWithoutStatus.getFirst(), Collections.singletonList("Aplikowano o Temat promotora"));
 
             model.addAttribute("topicsTakenByStudents", diplomaTopicService.wrapTopicListWithDepartment(withStatusWithoutStatus.getFirst()));
             model.addAttribute("topicsProposedByStudent", diplomaTopicService.wrapTopicListWithDepartment(withStatusWithoutStatus.getSecond()));
@@ -74,7 +74,7 @@ public class TopicController {
              List<DiplomaTopic> diplomaTopics = diplomaTopicService.getProposedTopicsForDepartmentId(user.getDepartments().get(0).getId());
 
              //get only the one created by promoter
-            diplomaTopics = diplomaTopicService.filterDiplomaListByStatusName(diplomaTopics, "Temat promotora");
+            diplomaTopics = diplomaTopicService.filterDiplomaListByStatusName(diplomaTopics, "Aplikowano o Temat promotora");
 
             //wrap promoters with diploma topics they created
             model.addAttribute("topicsProposedByPromoters",diplomaTopicService.wrapPromoterWithHisDiplomaTopics(diplomaTopics));

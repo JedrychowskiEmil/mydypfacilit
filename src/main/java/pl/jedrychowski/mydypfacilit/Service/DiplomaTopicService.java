@@ -43,7 +43,7 @@ public class DiplomaTopicService {
 
         //check if new
         if (diplomaTopic.getId() == 0) {
-            Status status = daoHibernate.getStatusByName("Temat promotora");
+            Status status = daoHibernate.getStatusByName("Aplikowano o Temat promotora");
             diplomaTopic.setStatus(status);
 
             Department department = daoHibernate.getDepartmentById(departmentId);
@@ -170,7 +170,7 @@ public class DiplomaTopicService {
             diplomaTopic.setStatus(status);
             diplomaTopic.setPromoter(null);
             daoHibernate.saveOrUpdateDiplomaTopic(diplomaTopic);
-        } else if (diplomaTopic.getStatus().equals(daoHibernate.getStatusByName("Temat promotora"))) {
+        } else if (diplomaTopic.getStatus().equals(daoHibernate.getStatusByName("Aplikowano o Temat promotora"))) {
             status = daoHibernate.getStatusByName("Temat odrzucono");
             DiplomaTopic newDiplomaTopic = new DiplomaTopic();
             newDiplomaTopic.setStudent(diplomaTopic.getStudent());
@@ -216,6 +216,15 @@ public class DiplomaTopicService {
         daoHibernate.saveOrUpdateDiplomaTopic(studentTopic);
     }
 
+    //TODO - mail
+    public void applyForPromoterTopic(User student, Long topicID, String content) {
+        DiplomaTopic diplomaTopic= daoHibernate.getDiplomatopicById(topicID);
+        diplomaTopic.setStudent(student);
+        Status status = daoHibernate.getStatusByName("Aplikowano o Temat promotora");
+        diplomaTopic.setStatus(status);
+        daoHibernate.saveOrUpdateDiplomaTopic(diplomaTopic);
+    }
+
     public void undoapply(Long diplomaId) {
         DiplomaTopic diplomaTopic = daoHibernate.getDiplomatopicById(diplomaId);
         Status status = daoHibernate.getStatusByName("Zaproponowano temat");
@@ -228,7 +237,7 @@ public class DiplomaTopicService {
             daoHibernate.saveOrUpdateDiplomaTopic(diplomaTopic);
 
             //if it was promoters topic then just set student field to null
-        } else if (diplomaTopic.getStatus().equals(daoHibernate.getStatusByName("Temat promotora"))) {
+        } else if (diplomaTopic.getStatus().equals(daoHibernate.getStatusByName("Aplikowano o Temat promotora"))) {
             diplomaTopic.setStudent(null);
             daoHibernate.saveOrUpdateDiplomaTopic(diplomaTopic);
         }

@@ -89,7 +89,7 @@
                     </a>
                     <a href="/admin/staff" type="button" class="btn btn-black btn-lg btn-block active"><i
                             class="fas fa-user-tie"></i>
-                        Pracownicy
+                        Promotorzy
                     </a>
                     <a href="/admin/groups" type="button" class="btn btn-black btn-lg btn-block"><i
                             class="fas fa-users"></i>
@@ -115,7 +115,7 @@
                 <div class="row padding border-bottom">
                     <!-- Froms -->
                     <div class="col-md-6 border-right">
-                        <h3> Dodaj lub modyfikuj pracownika</h3>
+                        <h3> Dodaj lub modyfikuj promotora</h3>
                         <form action="#" th:action="@{/admin/staff/save}" method="POST" class="needs-validation"
                               th:object="${newUser}" novalidate>
                             <input type="hidden" th:field="*{user.id}">
@@ -130,7 +130,7 @@
                                 <div class="col">
                                     <label for="fname">Imię*</label>
                                     <input type="text" th:field="*{user.firstName}" class="form-control" id="fname"
-                                           placeholder="Wprowadź imię pracownika" required>
+                                           placeholder="Wprowadź imię promotora" required>
                                 </div>
                                 <div class="col">
                                     <label for="lname">Nazwisko(a)*</label>
@@ -178,16 +178,17 @@
                         <ul>
                             <li>Zostanie utworzone w systemie konto z wprowadzonymi danymi</li>
                             <br>
-                            <li>Wygenerowany oraz wysłany zostanie <b>e-mail</b> z potwierdzeniem na wprowadzony adres
-                                email
+                            <li>Wygenerowana oraz wysłana zostanie <b>wiadomość</b> z potwierdzeniem na wprowadzony adres
+                                e-mail
                             </li>
                             <br>
-                            <li>E-mail konta będzie stanowić <b>login</b> dzięki któremy użytkownik zaloguję sie do
+                            <li>E-mail konta stanowić będzie  <b>login</b>, dzięki któremy użytkownik zaloguje się do
                                 aplikacji
                             </li>
                             <br>
-                            <li><b>Automatycznie zostanie wygenerowane losowe <i style="font-weight: 900;">silne</i>
-                                hasło które zostanie dołączone do wiadomości email</b></li>
+                            <li><b>Automatycznie zostanie wygenerowane losowe, <i style="font-weight: 900;">silne</i>
+                                hasło, które zostanie dołączone do wiadomości email</b></li>
+                            </ul>
                             <br>
                             <span class="btn btn-warning btn-sm"><i class="fas fa-cog"></i></span>
                             <span style="font-weight: 500;">Modyfikuj rekord</span>
@@ -198,7 +199,7 @@
                             <button type="button" class="btn btn-primary btn-sm">
                                 <i class="fas fa-envelope"></i>
                             </button>
-                            <span style="font-weight: 500;">Wyślij wiadomość do pracownika</span>
+                            <span style="font-weight: 500;">Wyślij wiadomość do promotora</span>
                     </div>
                 </div>
                 <!-- 2nd row -->
@@ -258,7 +259,8 @@
                                                 th:attrappend="data-target=${promoter.promoter.id}, ">
                                             <i class="fas fa-ban"></i>
                                         </button>
-                                    <button type="button" class="btn btn-primary btn-sm">
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                            data-target="#sendMail" th:attrappend="data-target=${promoter.promoter.id}, ">
                                         <i class="fas fa-envelope"></i>
                                     </button>
                                     </td>
@@ -290,6 +292,38 @@
                                     </div>
                                 </div>
 
+                                <!-- send mail to user - Button -->
+                                <div class="modal fade" id="sendMail" tabindex="-1" role="dialog"
+                                     aria-labelledby="confirmLabel" th:attrappend="id=${promoter.promoter.id}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+
+                                                <h4 class="modal-title">Wyślij wiadomość do:<br><b><span th:text="${promoter.promoter}"></span></b></h4>
+                                            </div>
+                                            <form action="#" th:action="@{staff/sendMail}" method="POST"
+                                                  class="needs-validation" novalidate>
+                                                <div class="modal-body">
+                                                    <label for="content">Treść wiadomości:</label>
+                                                    <textarea class="form-control" id="content" rows="7" th:name="content"
+                                                              required></textarea>
+                                                    <div class="invalid-feedback">To pole nie może pozostać puste</div>
+                                                    <input type="hidden" th:name="userId" th:value="${promoter.promoter.id}">
+                                                    <input type="hidden" th:name="show" th:value="${showStudents.show}">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <button type="submit"
+                                                            class="btn btn-primary btn-sm">Wyślij
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <tr class="thead-dark" th:if="${showStudents.show}" th:each="student : ${promoter.students}">
                                     <th scope="row"><i class="fas fa-user-graduate"></i></th>
                                     <td>
@@ -298,7 +332,7 @@
                                     </td>
                                     <td>
                                         <span th:text="${student.firstName}"></span>
-                                        <span th:text="${student.firstName}"></span>
+                                        <span th:text="${student.lastName}"></span>
                                     </td>
                                     <td><span th:text="${student.email}"></span></td>
                                     <td>
@@ -312,7 +346,7 @@
                             </tbody>
                         </table>
                         <div class="alert alert-info text-justify" role="alert" th:if="${#lists.isEmpty(promoters)}">
-                            <b><i>Nie utworzono jeszcze żadnego pracownika</i></b>
+                            <b><i>Nie utworzono jeszcze żadnego promotora</i></b>
                         </div>
                     </div>
 

@@ -6,10 +6,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.jedrychowski.mydypfacilit.DAO.DAOHibernate;
 import pl.jedrychowski.mydypfacilit.Entity.News;
+import pl.jedrychowski.mydypfacilit.Entity.Role;
 import pl.jedrychowski.mydypfacilit.Entity.User;
 import pl.jedrychowski.mydypfacilit.Service.DiplomaTopicService;
+import pl.jedrychowski.mydypfacilit.Service.EmailService;
 import pl.jedrychowski.mydypfacilit.Service.UserService;
 
 import java.util.Comparator;
@@ -23,6 +27,9 @@ public class MainController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private DiplomaTopicService diplomaTopicService;
@@ -47,4 +54,12 @@ public class MainController {
         return "login";
     }
 
+    @PostMapping("/sendMail")
+    public String sendMail(@RequestParam("content") String content,
+                           @RequestParam("url") String url,
+                           @RequestParam("pwID") Long pwID) {
+
+        userService.sendPw(pwID, content);
+        return "redirect:" + url;
+    }
 }

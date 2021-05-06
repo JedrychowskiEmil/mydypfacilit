@@ -88,7 +88,7 @@
                             class="fas fa-graduation-cap"></i> Dyplomanci
                     </a>
                     <a href="/admin/staff" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-user-tie"></i>
-                        Pracownicy
+                        Promotorzy
                     </a>
                     <a href="/admin/groups" type="button" class="btn btn-black btn-lg btn-block"><i class="fas fa-users"></i>
                         Grupy Kont
@@ -111,12 +111,11 @@
                 <div class="row padding border-bottom">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <h3> Zmień stronę z proesem dyplomowania</h3>
+                        <h3> Zmień treść strony z procesem dyplomowania</h3>
                         <form action="#" th:action="@{/admin/steps/save}" method="POST">
                             <div class="form-row">
                                 <div class="col-12">
-                                    <label for="content">Wprowadź treść strony (html) która będzie się wyświetlać pod
-                                        zakładką Proces Dyplomowania</label>
+                                    <label for="content">Wprowadź treść strony (HTML)</label>
                                     <textarea class="form-control" id="content" rows="30" th:text="${content}" th:name="content"></textarea>
                                 </div>
                             </div>

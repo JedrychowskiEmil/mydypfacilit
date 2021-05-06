@@ -15,6 +15,7 @@ import pl.jedrychowski.mydypfacilit.Service.UserService;
 
 import java.util.List;
 
+//TODO zmiana nazwy klasy
 @Controller
 @RequestMapping("/mythesis")
 public class diplomantController {
@@ -44,15 +45,20 @@ public class diplomantController {
             case "Temat odrzucono":
                 DiplomaTopic diplomaTopic = user.getStudentTopic();
                 model.addAttribute("diplomaTopic", diplomaTopic);
+                List<User> promoters;
+                if (user.getDepartments().size() > 0) {
+                    promoters = userService.getPromotersByDepartmentId(user.getDepartments().get(0).getId());
+                } else {
+                    promoters = null;
+                }
 
-                List<User> promoters = userService.getPromotersByDepartmentId(user.getDepartments().get(0).getId());
                 model.addAttribute("promoters", promoters);
 
                 return "mythesisbeforeapply";
 
 
             case "Zaproponowano temat":
-            case "Temat promotora":
+            case "Aplikowano o Temat promotora":
                 return "mythesisapplied";
 
             case "W trakcie pisania pracy":
@@ -60,11 +66,11 @@ public class diplomantController {
                 return "mythesisinmiddleofwork";
 
             case "Praca zatwierdzona przez promotora":
-            case "Praca przyjeta i zatwierdzona":
+            case "Praca przyjęta i zatwierdzona":
                 return "mythesisaccepted";
 
             default:
-                return "error-invalid-status-state";
+                return "mythesiscustomstatus";
         }
 
     }
@@ -84,12 +90,17 @@ public class diplomantController {
     //TODO - no to ma dzialac
     @PostMapping("/apply")
     public String apply(@RequestParam("promoterId") Long promoterId,
-                        @RequestParam("content") String content) {
+                        @RequestParam("content") String content,
+                        @RequestParam(value = "promoterTopicId", required = false) Long topicId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalEmail = authentication.getName();
         User user = userService.getUserByemail(currentPrincipalEmail);
 
-        diplomaTopicService.applyForPromoter(user.getStudentTopic(), promoterId, content);
+        if(topicId == null) {
+            diplomaTopicService.applyForPromoter(user.getStudentTopic(), promoterId, content);
+        }else{
+            diplomaTopicService.applyForPromoterTopic(user, topicId, content);
+        }
         return "redirect:/mythesis";
     }
 
@@ -106,12 +117,12 @@ public class diplomantController {
 
     //todo feedback
     @PostMapping("/sendmailwithfile")
-    public String sendmailwithfile(@RequestParam("file")MultipartFile file,
-                                   @RequestParam("content") String content){
+    public String sendmailwithfile(@RequestParam("file") MultipartFile file,
+                                   @RequestParam("content") String content) {
         //emailService.sendEmail("test@mail.com","odbiorca@mail.com", "tresc", "topic");
         try {
             emailService.sendMessageWithAttachment("test@mail.com", "odbiorca@mail.com", "tresc", "topic", file);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "redirect:/mythesis";

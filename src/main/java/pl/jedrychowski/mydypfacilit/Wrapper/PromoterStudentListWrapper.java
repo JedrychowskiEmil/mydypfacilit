@@ -5,6 +5,7 @@ import pl.jedrychowski.mydypfacilit.Entity.User;
 import java.util.Comparator;
 import java.util.List;
 
+
 public class PromoterStudentListWrapper implements Comparable<PromoterStudentListWrapper>{
     User promoter;
     List<User> students;
@@ -32,8 +33,8 @@ public class PromoterStudentListWrapper implements Comparable<PromoterStudentLis
 
     @Override
     public int compareTo(PromoterStudentListWrapper o) {
-
         return Comparator.comparing((PromoterStudentListWrapper p) -> p.promoter.getFirstName().toUpperCase())
                 .thenComparing((PromoterStudentListWrapper p) -> p.promoter.getLastName().toUpperCase()).compare(this, o);
     }
+
 }

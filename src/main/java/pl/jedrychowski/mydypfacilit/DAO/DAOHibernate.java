@@ -69,13 +69,17 @@ public class DAOHibernate {
     public void saveDepartment(Department department) {
         Session session = entityManager.unwrap(Session.class);
 
-        //If it isn't a new department then find attached users or they will be lost
+        //If it isn't a new department then get that department and set new values
         if (department.getId() != 0) {
-            List<User> users = getUsersByDepartmentId(department.getId());
-            department.setUsers(users);
+            Department departmentOld = getDepartmentById(department.getId());
+            departmentOld.setDepartment(department.getDepartment());
+            departmentOld.setField(department.getField());
+            departmentOld.setStudyMode(department.getStudyMode());
+            departmentOld.setStudyGroup(department.getStudyGroup());
+            session.saveOrUpdate(departmentOld);
+        }else{
+            session.saveOrUpdate(department);
         }
-
-        session.saveOrUpdate(department);
     }
 
     @Transactional

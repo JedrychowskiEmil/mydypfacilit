@@ -90,7 +90,7 @@
                     </a>
                     <a href="/admin/staff" type="button" class="btn btn-black btn-lg btn-block"><i
                             class="fas fa-user-tie"></i>
-                        Pracownicy
+                        Promotorzy
                     </a>
                     <a href="/admin/groups" type="button" class="btn btn-black btn-lg btn-block"><i
                             class="fas fa-users"></i>
@@ -178,16 +178,16 @@
                         <ul>
                             <li>Zostanie utworzone w systemie konto z wprowadzonymi danymi</li>
                             <br>
-                            <li>Wygenerowany oraz wysłany zostanie <b>e-mail</b> z potwierdzeniem na wprowadzony adres
-                                email
+                            <li>Wygenerowana oraz wysłana zostanie <b>wiadomość</b> z potwierdzeniem na wprowadzony adres
+                                e-mail
                             </li>
                             <br>
-                            <li>E-mail konta będzie stanowić <b>login</b> dzięki któremy użytkownik zaloguję sie do
+                            <li>E-mail konta stanowić będzie  <b>login</b>, dzięki któremy użytkownik zaloguje się do
                                 aplikacji
                             </li>
                             <br>
-                            <li><b>Automatycznie zostanie wygenerowane losowe <i style="font-weight: 900;">silne</i>
-                                hasło które zostanie dołączone do wiadomości email</b></li>
+                            <li><b>Automatycznie zostanie wygenerowane losowe, <i style="font-weight: 900;">silne</i>
+                                hasło, które zostanie dołączone do wiadomości email</b></li>
                             <br>
                             <p><b>Akcje modyfikujące status pracy studenta są dostępne dopiero po zaakceptowaniu pracy przez promotora</b></p>
                             <button type="button" class="btn btn-success btn-sm"><i class="fas fa-check"></i>
@@ -201,7 +201,7 @@
                             <span style="font-weight: 500;">Usuń rekord</span>
                             <br>
                             <button class="btn btn-secondary btn-sm"><i class="fas fa-pen"></i></button>
-                            <span style="font-weight: 500;">Ustaw inny niestandardowy status pracy</span>
+                            <span style="font-weight: 500;">Ustaw inny, niestandardowy status pracy</span>
                             <br>
                             <button type="button" class="btn btn-primary btn-sm">
                                 <i class="fas fa-envelope"></i>
@@ -277,11 +277,48 @@
                                 <tr>
                                     <th scope="col" colspan="7" style="text-align: center;">
                                         <span th:text="${department.department}"></span>
-                                        <button type="button" class="btn btn-primary btn-sm float-right">
+                                        <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal"
+                                                data-target="#sendMailToStudentGroup" th:attrappend="data-target=${department.department.id}, ">
                                             <i class="fas fa-mail-bulk"></i>
                                         </button>
                                     </th>
                                 </tr>
+
+                                <!-- send mail to group - Button -->
+                                <div class="modal fade" id="sendMailToStudentGroup" tabindex="-1" role="dialog"
+                                     aria-labelledby="confirmLabel" th:attrappend="id=${department.department.id}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+
+                                                <h4 class="modal-title">Wyślij wiadomość grupową do:<br><b><span th:text="${department.department}"></span></b></h4>
+                                            </div>
+                                            <form action="#" th:action="@{students/sendGroupMail}" method="POST"
+                                                  class="needs-validation" novalidate>
+                                                <div class="modal-body">
+                                                    <label for="mailContent">Treść wiadomości grupowej:</label>
+                                                    <textarea class="form-control" id="mailContent" rows="7" th:name="content"
+                                                              required></textarea>
+                                                    <div class="invalid-feedback">To pole nie może pozostać puste</div>
+                                                    <input type="hidden" th:name="departmentId" th:value="${department.department.id}">
+                                                    <div th:object="${filterUsers}">
+                                                        <input type="hidden" th:field="*{filterDepartmentId}">
+                                                        <input type="hidden" th:field="*{filterStatusId}">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <button type="submit"
+                                                            class="btn btn-primary btn-sm">Wyślij
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 </thead>
                                 <thead class="thead-dark">
                                 <tr>
@@ -333,7 +370,8 @@
                                                 data-target="#deleteConfirm" th:attrappend="data-target=${user.id}, ">
                                             <i class="fas fa-ban"></i>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-sm">
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                                data-target="#sendMail" th:attrappend="data-target=${user.id}, ">
                                             <i class="fas fa-envelope"></i>
                                         </button>
                                     </td>
@@ -364,7 +402,6 @@
                                         </div>
                                     </div>
                                 </div>
-
 
                                 <!-- Confirm Delete - Button -->
                                 <div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog"
@@ -450,6 +487,41 @@
                                                         Anuluj
                                                     </button>
                                                     <button type="submit" th:name="add" th:value="true" class="btn btn-success btn-sm">Ustaw status</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- send mail to user - Button -->
+                                <div class="modal fade" id="sendMail" tabindex="-1" role="dialog"
+                                     aria-labelledby="confirmLabel" th:attrappend="id=${user.id}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+
+                                                <h4 class="modal-title">Wyślij wiadomość do:<br><b><span th:text="${user}"></span></b></h4>
+                                            </div>
+                                            <form action="#" th:action="@{students/sendMail}" method="POST"
+                                                  class="needs-validation" novalidate>
+                                                <div class="modal-body">
+                                                    <label for="content">Treść wiadomości:</label>
+                                                    <textarea class="form-control" id="content" rows="7" th:name="content"
+                                                              required></textarea>
+                                                    <div class="invalid-feedback">To pole nie może pozostać puste</div>
+                                                    <input type="hidden" th:name="userId" th:value="${user.id}">
+                                                    <div th:object="${filterUsers}">
+                                                        <input type="hidden" th:field="*{filterDepartmentId}">
+                                                        <input type="hidden" th:field="*{filterStatusId}">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                                                        Anuluj
+                                                    </button>
+                                                    <button type="submit"
+                                                            class="btn btn-primary btn-sm">Wyślij
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>

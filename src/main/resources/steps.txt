@@ -1,5 +1,38 @@
+<h3><b> Proces dyplomowania </b></h3>
+<h4>Lista wymaganych dokumentów</h4>
+<h5 style="padding-left:1em">Dokumenty wymagane od dyplomanta</h5>
 <ul>
-	<li>
-		<b>Twórz własny temat lub aplikuj o gotowy temat</b>
-	</li>
+	<li>Karta wydania tematu pracy dyplomowej</li>
+	<li>Oświadczenie studenta o samodzielnym sporządzeniu pracy dyplomowej</li>
+	<li>Wniosek o wpisanie informacji dodatkowych w suplemencie do dyplomu ukończenia studiów</li>
+	<li>Dane umożliwiające kontakt z autorem pracy</li>
+	<li>Karta obiegowa absolwenta</li>
+</ul>
+<h5 style="padding-left:1em">Dokumenty wymagane od promotora</h5>
+<ul>
+	<li>Oświadczenie promotora o opiece nad przygotowaną pracą dyplomową</li>
+</ul>
+<h5 style="padding-left:1em">Kroki procesu dyplomowania</h5>
+<ol>
+	<li>Stwórz <b>własny</b> temat i aplikuj o jego uznanie u wybranego promotora lub bezpośrednio aplikuj o <b>gotowy</b> temat</li>
+	<li>Jeśli twoja aplikacja została <span style="color:green; font-weight: bold;">zaakceptowana</span> wypełnij "<i>Kartę wydania tematu pracy dyplomowej</i>"</li>
+	<li>Napisz swoją pracę dyplomową oraz prześlij ją swojemu promotorowi do sprawdzenia</li>
+	<li>Poczekaj na <span style="color:green; font-weight: bold;">zaakceptowanie</span> gotowej pracy przez promotora</li>
+	<li>Złóż <b>wszystkie</b> wymagane dokumenty wraz ze swoją pracą do dziekanatu</li>
+	<li>Poczekaj na <span style="color:green; font-weight: bold;">zaakceptowanie</span> gotowej pracy przez dziekanat</li>
+	<li>Poczekaj na wyznaczenie terminu obrony twojej pracy dyplomowej</li>
+</ol>
+<h5 style="padding-left:1em">Wymogi dotyczące pracy dyplomowej</h5>
+<ul>
+	<li>Format arkusza papieru: <b>A4</b></li>
+	<li>Czcionka: <b>Times New Roman</b></li>
+	<li>Wielkość czcionki podstawowej: <b>12 pkt</b></li>
+	<li>Odstęp między wierszami: <b>1,5 wiersza</b></li>
+	<li>Marginesy : <b>górny : 2,5 cm; dolny : 2,5 cm; prawy : 1,5 cm; lewy : 3,5 cm</b> (w druku dwustronnym należy zastosować marginesy lustrzane)</li>
+	<li>Wyrównanie tekstu do obu marginesów (justowanie)</li>
+	<li>Wszystkie strony pracy są uwzględniane w numeracji ciągłej (w numeracji stron należy stosować cyfry arabskie)</li>
+	<li>Pierwszą stroną (nienumerowaną) jest strona tytułowa, numerację rozpoczynamy od spisu treści (strona nr 2)</li>
+	<li>Numer i tytuł tabeli w tekście umieszcza się nad tabelą</li>
+	<li>W częściach graficznych (np. planszach) należy umieścić temat pracy, imię i nazwisko autora i promotora oraz rok akademicki</li>
+	<li>Część graficzną (np. plansze) pomniejszoną do formatu A4 lub A3 należy trwale dołączyć do części tekstowej</li>
 </ul>

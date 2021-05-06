@@ -88,14 +88,14 @@
 
             <!-- With topic, waiting for promoter decision -->
             <div class="container-fluid"
-                 th:if="${loggedUser?.studentTopic?.status?.name == 'Zaproponowano temat' or loggedUser?.studentTopic?.status?.name == 'Temat promotora'}">
+                 th:if="${loggedUser?.studentTopic?.status?.name == 'Zaproponowano temat' or loggedUser?.studentTopic?.status?.name == 'Aplikowano o Temat promotora'}">
 
                 <!-- row 1 -->
                 <div class="row padding border-bottom">
 
                     <!-- options to choose from -->
                     <div class="col-6 padding border-right">
-                        <h3 c><i class="fas fa-hourglass-half"></i> Czekaj na decyzje promotora</h3>
+                        <h3 c><i class="fas fa-hourglass-half"></i> Czekaj na decyzję promotora</h3>
                         <div class=" padding border-bottom">
                             <h5 class="padding">Aplikujesz uznanie tematu:</h5>
                             <span th:text="${loggedUser.studentTopic.subject}"></span>
@@ -118,7 +118,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
 
-                                        <h4 class="modal-title" id="deleteConfirmLabel">Potwierdz anulowanie</h4>
+                                        <h4 class="modal-title" id="deleteConfirmLabel">Potwierdź anulowanie</h4>
                                     </div>
                                     <div class="modal-body">
                                         Czy na pewno chcesz anulować aplikacje o uznanie tematu? <br>
@@ -155,7 +155,7 @@
                                     <li style="color:green;"><i class="fas fa-check"></i> Aplikujesz o temat u wybranego
                                         promotora
                                     </li>
-                                    <li><i class="far fa-dot-circle"></i> Czekaj na decyzje promotora</li>
+                                    <li><i class="far fa-dot-circle"></i> Czekaj na decyzję promotora</li>
                                 </ul>
                             </div>
                         </div>
@@ -167,11 +167,11 @@
                                 <ul>
                                     <li>
                                         Czekaj na <b style="color:green">pozytywną</b> lub <b
-                                            style="color:red">negatywną</b> decyzje potencjalnego promotora
+                                            style="color:red">negatywną</b> decyzję potencjalnego promotora
                                     </li>
                                     <br>
                                     <li>
-                                        W każdej chwili możesz anulować swoją aplikacje
+                                        W każdej chwili możesz anulować swoją aplikację
                                     </li>
                                 </ul>
                             </div>
@@ -184,6 +184,45 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="pw" role="dialog"
+     aria-labelledby="confirmLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Wyślij wiadomość:</h4>
+            </div>
+            <form action="#" th:action="@{/sendMail}" method="POST"
+                  class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <label for="content">Treść wiadomości:</label>
+                    <textarea class="form-control" id="content" rows="7" th:name="content"
+                              required></textarea>
+                    <div class="invalid-feedback">To pole nie może pozostać puste</div>
+                    <input type="hidden" th:name="url" th:value="${#httpServletRequest.requestURI}">
+                    <input type="hidden" th:name="pwID" id="pwID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                        Anuluj
+                    </button>
+                    <button type="submit"
+                            class="btn btn-primary btn-sm">Wyślij
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function changeValue(myid)
+    {
+        document.getElementById('pwID').value = myid;
+    }
+</script>
+
 <script>
 // Disable form submissions if there are invalid fields
 (function() {

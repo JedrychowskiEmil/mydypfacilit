@@ -128,6 +128,30 @@ public class AdminController {
         return "redirect:/admin/students";
     }
 
+    @PostMapping("students/sendMail")
+    public String sendMail(@RequestParam Long userId,
+                           @RequestParam String content,
+                           @ModelAttribute FilterUsers filterUsers,
+                           RedirectAttributes redirectAttributes) {
+
+        userService.sendMail(userId, content);
+        redirectAttributes.addAttribute("filterDepartmentId", filterUsers.getFilterDepartmentId());
+        redirectAttributes.addAttribute("filterStatusId", filterUsers.getFilterStatusId());
+        return "redirect:/admin/students";
+    }
+
+    @PostMapping("students/sendGroupMail")
+    public String sendGroupMail(@RequestParam Long departmentId,
+                                @RequestParam String content,
+                                @ModelAttribute FilterUsers filterUsers,
+                                RedirectAttributes redirectAttributes) {
+
+        userService.sendGroupMail(departmentId, content, "ROLE_STUDENT");
+        redirectAttributes.addAttribute("filterDepartmentId", filterUsers.getFilterDepartmentId());
+        redirectAttributes.addAttribute("filterStatusId", filterUsers.getFilterStatusId());
+        return "redirect:/admin/students";
+    }
+
     //#################################### STAFF ####################################
 
     //todo feedbacki
@@ -189,6 +213,16 @@ public class AdminController {
         return "redirect:/admin/staff";
     }
 
+    @PostMapping("staff/sendMail")
+    public String staffSendMail(@RequestParam Long userId,
+                                @RequestParam String content,
+                                @RequestParam(value = "show", required = false) boolean showStudents,
+                                RedirectAttributes redirectAttributes) {
+
+        userService.sendMail(userId, content);
+        redirectAttributes.addAttribute("show", showStudents);
+        return "redirect:/admin/staff";
+    }
 
     //#################################### GROUPS ####################################
     //TODO - zamienić requesty na POSTY zmieniajac hrefy w button z ukrytymi inputami
@@ -221,6 +255,7 @@ public class AdminController {
         String currentPrincipalEmail = authentication.getName();
         User loggedUser = userService.getUserByemail(currentPrincipalEmail);
         model.addAttribute("leftPanelInfo", userService.getLeftPanelInformations(loggedUser));
+
 
         daoHibernate.saveDepartment(department);
 
@@ -293,6 +328,19 @@ public class AdminController {
 
         model.addAttribute("showOption", new ShowOption(showStaff, showStudents));
 
+        return "admingroups";
+    }
+
+    @PostMapping("sendGroupMail")
+    public String groupSendGroupMail(@RequestParam Long departmentId,
+                                     @RequestParam String content,
+                                     @ModelAttribute("showOption") ShowOption showOption,
+                                     Model model) {
+        userService.sendGroupMail(departmentId, content, null);
+        model.addAttribute("newDepartment", new Department());
+        List<Department> departments = daoHibernate.getDepartments();
+        model.addAttribute("departments", departments);
+        model.addAttribute("showOption", showOption);
         return "admingroups";
     }
 

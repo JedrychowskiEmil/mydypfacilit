@@ -7,9 +7,11 @@
    padding: 0 !important;
    margin: 0 !important;
 }
+
 .padding {
     padding-top:1.2rem
 }
+
 .navbar{
     padding: .9rem;
     font-weight: bold;
@@ -58,9 +60,11 @@ html, body {
   background-color: black;
   color:white;
 }
+
 .tableFixHead          {
     overflow-y: auto; height: 100px;
 }
+
 .tableFixHead thead th {
     position: sticky; top: 0;
 }

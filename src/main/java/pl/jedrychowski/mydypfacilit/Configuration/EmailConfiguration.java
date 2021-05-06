@@ -52,6 +52,26 @@ public class EmailConfiguration {
         return message;
     }
 
+    @Bean
+    public SimpleMailMessage templateSendMessageAdmin() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Wiadomość od Administratora aplikacji MyDypFacilit");
+        message.setFrom(fromAddress);
+        message.setText(
+                "%s");
+        return message;
+    }
+
+    @Bean
+    public SimpleMailMessage templateSendMessageUser() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Nowa wiadomość z serwisu MyDypFacilit");
+        message.setFrom(fromAddress);
+        message.setText(
+                "%s");
+        return message;
+    }
+
     public void setHost(String host) {
         this.host = host;
     }

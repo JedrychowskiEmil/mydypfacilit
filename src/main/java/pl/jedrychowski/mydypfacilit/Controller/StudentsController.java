@@ -49,7 +49,7 @@ public class StudentsController {
                         "Brak promotora",
                         "Temat odrzucono",
                         "Zaproponowano temat",
-                        "Temat promotora"
+                        "Aplikowano o Temat promotora"
                 )).getSecond();
 
         model.addAttribute("assignedDiplomaTopics", diplomaTopicService.wrapTopicListWithDepartment(diplomaTopicList));

@@ -89,7 +89,7 @@
                     </a>
                     <a href="/admin/staff" type="button" class="btn btn-black btn-lg btn-block"><i
                             class="fas fa-user-tie"></i>
-                        Pracownicy
+                        Promotorzy
                     </a>
                     <a href="/admin/groups" type="button" class="btn btn-black btn-lg btn-block active"><i
                             class="fas fa-users"></i>
@@ -178,6 +178,7 @@
                             <br>
                             <li><b>Usunięcie Wydziału/Kierunku/Trybu/Grupy nie usunie przypisanych mu użytkowników</b>
                             </li>
+                        </ul>
                             <br>
                             <button type="button" class="btn btn-warning btn-sm"><i class="fas fa-cog"></i></button>
                             <a style="font-weight: 500;">Modyfikuj rekord</a>
@@ -241,17 +242,17 @@
                                 <td><span th:text="${department.field}"></span></td>
                                 <td><span th:text="${department.studyMode}"></span></td>
                                 <td><span th:text="${department.studyGroup}"></span></td>
-                                <td th:with="variableTest = 0">
+                                <td>
                                     <a th:href="@{/admin/modifyGroup(id=${department.id}, showStaff=${showOption.showStaff}, showStudents=${showOption.showStudents})}"
-                                       class="btn btn-warning btn-sm"><i class="fas fa-cog"></i>
+                                       class="btn btn-warning btn-sm">
+                                        <i class="fas fa-cog"></i>
                                     </a>
-
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                             data-target="#deleteConfirm" th:attrappend="data-target=${department.id}, ">
                                         <i class="fas fa-ban"></i>
                                     </button>
-
-                                    <button type="button" class="btn btn-primary btn-sm">
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                            data-target="#sendMailToGroup" th:attrappend="data-target=${department.id}, ">
                                         <i class="fas fa-mail-bulk"></i>
                                     </button>
                                 </td>
@@ -278,6 +279,41 @@
                                                class="btn btn-danger btn-sm">Usuń
                                             </a>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- send mail to group - Button -->
+                            <div class="modal fade" id="sendMailToGroup" tabindex="-1" role="dialog"
+                                 aria-labelledby="confirmLabel" th:attrappend="id=${department.id}">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+
+                                            <h4 class="modal-title">Wyślij wiadomość grupową do:<br><b><span th:text="${department}"></span></b></h4>
+                                        </div>
+                                        <form action="#" th:action="@{sendGroupMail}" method="POST"
+                                              class="needs-validation" novalidate>
+                                            <div class="modal-body">
+                                                <label for="mailContent">Treść wiadomości grupowej:</label>
+                                                <textarea class="form-control" id="mailContent" rows="7" th:name="content"
+                                                          required></textarea>
+                                                <div class="invalid-feedback">To pole nie może pozostać puste</div>
+                                                <input type="hidden" th:name="departmentId" th:value="${department.id}">
+                                                <div th:object="${showOption}">
+                                                    <input type="hidden" th:field="*{showStaff}">
+                                                    <input type="hidden" th:field="*{showStudents}">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                                                    Anuluj
+                                                </button>
+                                                <button type="submit"
+                                                        class="btn btn-primary btn-sm">Wyślij
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

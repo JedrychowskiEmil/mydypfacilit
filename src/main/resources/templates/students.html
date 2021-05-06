@@ -162,10 +162,10 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
 
-                                                    <h4 class="modal-title" id="acceptLabel">Zaakceptuj gotową prace</h4>
+                                                    <h4 class="modal-title" id="acceptLabel">Zaakceptuj gotową pracę</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Czy na pewno chcesz oznaczyć prace jako <b>gotową i nie wymagającą popraw?</b></p>
+                                                    <p>Czy na pewno chcesz oznaczyć pracę jako <b>gotową</b>?</p>
 
                                                 </div>
                                                 <div class="modal-footer">
@@ -215,7 +215,7 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
 
-                                                    <h4 class="modal-title" id="needCorrectionLabel">Oznacz prace jako wymagającą poprawy</h4>
+                                                    <h4 class="modal-title" id="needCorrectionLabel">Wyślij wiadomość i oznacz pracę jako wymagającą poprawy</h4>
                                                 </div>
 
                                                 <div class="modal-body">
@@ -242,7 +242,7 @@
                                                         Anuluj
                                                     </button>
                                                     <button type="submit" class="btn btn-warning btn-sm">
-                                                        Wymaga poprawek
+                                                        Wyślij
                                                     </button>
 
 
@@ -285,6 +285,45 @@
 
     </div>
 </div>
+
+<div class="modal fade" id="pw" role="dialog"
+     aria-labelledby="confirmLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Wyślij wiadomość:</h4>
+            </div>
+            <form action="#" th:action="@{/sendMail}" method="POST"
+                  class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <label for="content">Treść wiadomości:</label>
+                    <textarea class="form-control" id="content" rows="7" th:name="content"
+                              required></textarea>
+                    <div class="invalid-feedback">To pole nie może pozostać puste</div>
+                    <input type="hidden" th:name="url" th:value="${#httpServletRequest.requestURI}">
+                    <input type="hidden" th:name="pwID" id="pwID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                        Anuluj
+                    </button>
+                    <button type="submit"
+                            class="btn btn-primary btn-sm">Wyślij
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function changeValue(myid)
+    {
+        document.getElementById('pwID').value = myid;
+    }
+</script>
+
 </body>
 
 </html>

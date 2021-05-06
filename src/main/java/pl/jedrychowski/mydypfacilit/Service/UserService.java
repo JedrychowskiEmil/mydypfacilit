@@ -35,6 +35,12 @@ public class UserService implements UserDetailsService {
     private SimpleMailMessage templateStatusChange;
 
     @Autowired
+    private SimpleMailMessage templateSendMessageAdmin;
+
+    @Autowired
+    SimpleMailMessage templateSendMessageUser;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public boolean changePassword(User user, String password, String password2) {
@@ -326,7 +332,6 @@ public class UserService implements UserDetailsService {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
-
     public List<User> getPromotersByDepartmentId(Long departmentId) {
         List<User> users = daoHibernate.getUsersByDepartmentId(departmentId);
         Role role = daoHibernate.getRoleByName("ROLE_PROMOTER");
@@ -348,10 +353,10 @@ public class UserService implements UserDetailsService {
         daoHibernate.deleteStatus(removeStatus.getId());
     }
 
-    public String getLeftPanelInformations(User user){
+    public String getLeftPanelInformations(User user) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<b>Zalogowano jako:<br></b>").append(user).append("<br>");
-        switch (user.getRoles().get(0).getName()){
+        switch (user.getRoles().get(0).getName()) {
             case "ROLE_STUDENT":
                 stringBuilder.append("<hr/>");
                 leftPanelStudent(user, stringBuilder);
@@ -369,12 +374,12 @@ public class UserService implements UserDetailsService {
         stringBuilder.append("<b>Przypisani studenci:<br></b>");
         List<DiplomaTopic> topics = user.getPromoterTopic();
         stringBuilder.append("<ul>");
-        for(DiplomaTopic t : topics){
-            if(t.getStudent() != null && t.getStatus().getId() > 5){
+        for (DiplomaTopic t : topics) {
+            if (t.getStudent() != null && t.getStatus().getId() > 5) {
                 stringBuilder.append("<li>");
                 stringBuilder.append(t.getStudent()).append("<br>");
                 stringBuilder.append(t.getStudent().getEmail());
-                stringBuilder.append(" <button type=\"button\" class=\"btn btn-outline-primary btn-sm\">" +
+                stringBuilder.append(" <button type=\"button\" class=\"btn btn-outline-primary btn-sm\" data-toggle=\"modal\" data-target=\"#pw\" onclick=\"changeValue('"+t.getStudent().getId()+"');\">" +
                         "<i class=\"fas fa-envelope\"></i>\n" +
                         "</button>").append("<br>");
                 stringBuilder.append("</li>").append("<br>");
@@ -384,29 +389,29 @@ public class UserService implements UserDetailsService {
         return stringBuilder;
     }
 
-    private StringBuilder leftPanelStudent(User user, StringBuilder stringBuilder){
+    private StringBuilder leftPanelStudent(User user, StringBuilder stringBuilder) {
         stringBuilder.append("<b>Promotor:<br></b>");
-        if(user.getStudentTopic()!=null){
-            if(user.getStudentTopic().getPromoter() != null){
+        if (user.getStudentTopic() != null) {
+            if (user.getStudentTopic().getPromoter() != null) {
                 stringBuilder.append(user.getStudentTopic().getPromoter()).append("<br>");
                 stringBuilder.append(user.getStudentTopic().getPromoter().getEmail());
-                stringBuilder.append(" <button type=\"button\" class=\"btn btn-outline-primary btn-sm\">" +
+                stringBuilder.append(" <button type=\"button\" class=\"btn btn-outline-primary btn-sm\" data-toggle=\"modal\" data-target=\"#pw\" onclick=\"changeValue('"+user.getStudentTopic().getPromoter().getId()+"');\">" +
                         "<i class=\"fas fa-envelope\"></i>\n" +
                         "</button>").append("<br>");
-            }else{
+            } else {
                 stringBuilder.append("Brak promotora").append("<br>");
             }
-        }else{
+        } else {
             stringBuilder.append("Brak promotora").append("<br>");
         }
         stringBuilder.append("<hr/>");
         stringBuilder.append("<b>Twoja praca dyplomowa:<br></b>");
-        if(user.getStudentTopic()!=null){
+        if (user.getStudentTopic() != null) {
             stringBuilder.append("<br>Temat:").append("<br>");
             stringBuilder.append("\"<i>").append(user.getStudentTopic().getSubject()).append("</i>\"<br>");
             stringBuilder.append("<br>Status pracy:").append("<br>");
             stringBuilder.append("<span ");
-            switch ((int) user.getStudentTopic().getStatus().getId()){
+            switch ((int) user.getStudentTopic().getStatus().getId()) {
                 case 2:
                 case 3:
                     stringBuilder.append("style=\"color: red; font-weight: bold;\">");
@@ -429,9 +434,46 @@ public class UserService implements UserDetailsService {
             }
             stringBuilder.append(user.getStudentTopic().getStatus().getName()).append("<br>");
             stringBuilder.append("</span>");
-        }else{
+        } else {
             stringBuilder.append("<br>Nie wybrałeś jeszcze tematu swojej pracy dyplomowej").append("<br>");
         }
         return stringBuilder;
+    }
+
+
+    public void sendMail(Long userId, String content) {
+        User user = daoHibernate.getUserById(userId);
+        emailService.sendEmail(
+                templateSendMessageAdmin.getFrom(),
+                user.getEmail(),
+                templateSendMessageAdmin.getSubject(),
+                String.format(templateSendMessageAdmin.getText(), content)
+        );
+    }
+
+    public void sendGroupMail(Long departmentId, String content, String roleName) {
+        List<User> users = daoHibernate.getUsersByDepartmentId(departmentId);
+        if (roleName != null) {
+            Role role = daoHibernate.getRoleByName(roleName);
+            users.removeIf(o -> !o.getRoles().contains(role));
+        }
+        users.forEach(u ->
+                emailService.sendEmail(
+                        templateSendMessageAdmin.getFrom(),
+                        u.getEmail(),
+                        templateSendMessageAdmin.getSubject(),
+                        String.format(templateSendMessageAdmin.getText(), content)
+                )
+        );
+    }
+
+    public void sendPw(Long userId, String content) {
+        User user = daoHibernate.getUserById(userId);
+        emailService.sendEmail(
+                templateSendMessageUser.getFrom(),
+                user.getEmail(),
+                templateSendMessageUser.getSubject(),
+                String.format(templateSendMessageUser.getText(), content)
+        );
     }
 }
