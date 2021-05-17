@@ -5,6 +5,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.jedrychowski.mydypfacilit.Configuration.EmailConfiguration;
@@ -32,7 +33,7 @@ public class EmailService  {
         mailSenderImpl.setPassword(emailConfiguration.getPassword());
         return mailSenderImpl;
     }
-
+    @Async
     public void sendEmail(String from, String to, String topic, String text){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(from);
